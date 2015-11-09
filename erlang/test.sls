@@ -10,3 +10,6 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+    - exclude:
+      - erlang_procs
+      - erlang_port

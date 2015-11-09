@@ -4,7 +4,7 @@
 
 erlang_procs:
   description: Erlang Port Mapper Daemon
-  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C epmd'
+  command: '/usr/lib/nagios/plugins/check_procs -w 1:1 -c :1 -C epmd'
 
 erlang_port:
   {%- set timeout = 30 %}

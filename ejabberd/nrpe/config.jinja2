@@ -1,8 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- include "erlang/nrpe/config.jinja2" -%}
-
 {%- set timeout = 30 %}
+
 ejabberd_proc:
   description: ejabberd Process
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C beam -u ejabberd"

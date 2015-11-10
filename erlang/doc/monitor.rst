@@ -4,8 +4,6 @@ Monitor
 Mandatory
 ---------
 
-.. include:: /erlang/doc/monitor.inc
-
 .. |deployment| replace:: erlang
 
 .. warning::

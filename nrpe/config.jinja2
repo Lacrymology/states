@@ -13,7 +13,7 @@ nsca_passive_procs:
   it's not possible to have nsca_passive check for itself.
   And it does not make much sense to spawn a subprocess from nsca_passive
   daemon to check itself. So this check should be active.
--#}
+#}
   passive: False
 
 {%- set warning_percentage = salt['pillar.get']('nrpe:disk_warning_percentage', 20) | int %}

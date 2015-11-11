@@ -570,16 +570,20 @@ class States(unittest.TestCase):
         procs = []
         if HAS_PSUTIL:
             for p in psutil.process_iter():
-                if int(psutil.__version__.split('.')[0]) < 2:
-                    procs.append({"name": p.name,
-                                  "cmdline": p.cmdline,
-                                  "memory_percent": p.get_memory_percent(),
-                                  })
-                else:
-                    procs.append({"name": p.name,
-                                  "cmdline": p.cmdline(),
-                                  "memory_percent": p.memory_percent(),
-                                  })
+                try:
+                    if int(psutil.__version__.split('.')[0]) < 2:
+                        procs.append({"name": p.name,
+                                      "cmdline": p.cmdline,
+                                      "memory_percent": p.get_memory_percent(),
+                                      })
+                    else:
+                        procs.append({"name": p.name,
+                                      "cmdline": p.cmdline(),
+                                      "memory_percent": p.memory_percent(),
+                                      })
+                except psutil.NoSuchProcess:
+                    logger.debug(
+                        'Process %s termninated before return info', p.name)
             procs = sorted(procs, key=lambda p: p["memory_percent"],
                            reverse=True)[0:top]
         return procs

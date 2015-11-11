@@ -35,7 +35,7 @@ Example::
 youtrack:heap_size
 ~~~~~~~~~~~~~~~~~~
 
-Set maximum :doc:`/java/doc/index` heap size (-Xmx).
+Set maximum :doc:`/java/doc/index` heap size ``-Xmx``
 
 Format: <size>[g|G|m|M|k|K].
 

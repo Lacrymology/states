@@ -11,7 +11,7 @@ Introduction
 :doc:`index` is a proprietary, commercial browser-based bug tracker, issue
 tracking system and project management software developed by JetBrains. It
 focuses on query-based issue search with auto-completion, manipulating issues
-in batches, customizing the set of issue attributes,[3] and creating custom
+in batches, customizing the set of issue attributes, and creating custom
 workflows.
 
 .. https://www.jetbrains.com/youtrack/

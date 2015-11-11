@@ -13,14 +13,14 @@ youtrack_procs:
 
 youtrack_port:
   description: YouTrack Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8080 -t {{ timeout }}
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8082 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - youtrack_procs
 
 youtrack_http:
   description: YouTrack HTTP
-  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 8080 -u '/' -e 'HTTP/1.1 302 Found' -t {{ timeout }}
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 8082 -u '/' -e 'HTTP/1.1 302 Found' -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - youtrack_port

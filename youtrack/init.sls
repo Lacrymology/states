@@ -44,7 +44,7 @@ include:
     - mode: 440
     - require:
       - pkg: nginx
-      - service: youtrack
+      - process: youtrack
     - watch_in:
       - service: nginx
 
@@ -110,6 +110,12 @@ youtrack:
       - user: youtrack
       - pkg: jre-7
       - file: jre-7
+  process:
+    - wait_socket
+    - port: 8082
+    - timeout: 60
+    - require:
+      - service: youtrack
 
 {%- if ssl %}
 extend:

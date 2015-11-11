@@ -11,8 +11,6 @@ Mandatory
    In this document, when refer to a pillar key ``pillar_prefix``
    means ``ejabberd``.
 
-.. include:: /erlang/doc/monitor.inc
-
 .. _monitor-ejabberd_proc:
 
 ejabberd_proc

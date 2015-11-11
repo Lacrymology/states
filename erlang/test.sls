@@ -10,3 +10,13 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+    - exclude:
+      - erlang_procs
+      - erlang_port
+  qa:
+    - test
+    - name: erlang
+    - doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

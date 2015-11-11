@@ -110,3 +110,15 @@ youtrack:
       - user: youtrack
       - pkg: jre-7
       - file: jre-7
+
+{%- if ssl %}
+extend:
+  nginx.conf:
+    file:
+      - context:
+          ssl: {{ ssl }}
+  nginx:
+    service:
+      - watch:
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
+{%- endif %}

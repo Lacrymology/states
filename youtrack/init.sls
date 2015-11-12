@@ -1,5 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {%- from 'macros.jinja2' import manage_pid with context %}
 {%- set ssl = salt['pillar.get']('youtrack:ssl', False) %}
 
@@ -8,6 +9,7 @@ include:
   - java.7
   - local
   - nginx
+  - rsyslog
 {% if ssl %}
   - ssl
 {% endif %}
@@ -119,6 +121,8 @@ youtrack:
     - timeout: 60
     - require:
       - service: youtrack
+
+{{ manage_upstart_log('youtrack') }}
 
 {%- if ssl %}
 extend:

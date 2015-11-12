@@ -1,0 +1,19 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{%- set heap_size = salt['pillar.get']('youtrack:heap_size', '1g') %}
+
+respawn
+respawn limit 10 5
+
+start on (net-device-up
+          and local-filesystems
+          and runlevel [2345]
+          and started rsyslog)
+stop on runlevel [!2345]
+
+setuid youtrack
+setgid youtrack
+
+exec java -Xmx{{ heap_size }} -XX:MaxPermSize=250m -Djava.awt.headless=true -Djetbrains.youtrack.disableBrowser=true -Djetbrains.mps.webr.log4jPath=/etc/youtrack/log4j.xml -jar /usr/local/youtrack/{{ jarfile }} 8082

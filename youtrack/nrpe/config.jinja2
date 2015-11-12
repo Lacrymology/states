@@ -1,0 +1,26 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+{%- set timeout = 45 -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{{ nginx_instance('youtrack', http_uri='/', http_result='HTTP/1.1 302 Found' ,extra_dependencies=('youtrack_http',), https_result='HTTP/1.1 302 Found' ) }}
+
+youtrack_procs:
+  description: YouTrack Process
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u youtrack -C java -a '-jar /usr/local/youtrack/youtrack'"
+
+youtrack_port:
+  description: YouTrack Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8082 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - youtrack_procs
+
+youtrack_http:
+  description: YouTrack HTTP
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 8082 -u '/' -e 'HTTP/1.1 302 Found' -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - youtrack_port

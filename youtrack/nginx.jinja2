@@ -1,0 +1,24 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
+
+{% extends "nginx/template.jinja2" %}
+{% block upstream %}
+upstream youtrack {
+    server 127.0.0.1:8082;
+}
+{%- endblock %}
+
+{% block root_location %}
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header Host $http_host;
+        proxy_next_upstream error;
+        proxy_pass http://youtrack;
+    }
+
+    charset utf-8;
+{%- endblock %}

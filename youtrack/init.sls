@@ -94,6 +94,7 @@ youtrack:
     - present
     - name: youtrack
     - home: /var/lib/youtrack
+    - shell: /bin/false
   file:
     - managed
     - name: /etc/init/youtrack.conf

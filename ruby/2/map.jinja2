@@ -1,9 +1,0 @@
-{#- warning: the version of precise version contains "preicse", that is correct #}
-{% set ruby_2 = salt["grains.filter_by"]({
-  "precise": {
-    "version": "2.1.5-1bbox1~preicse1",
-  },
-  "trusty": {
-    "version": "2.1.5-1bbox1~trusty1"
-  },
-}, grain="oscodename", default="precise") %}

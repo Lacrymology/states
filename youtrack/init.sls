@@ -24,7 +24,7 @@ include:
 /usr/local/youtrack:
   file:
     - directory
-    - user: youtrack
+    - user: root
     - group: youtrack
     - mode: 750
     - require:

@@ -62,6 +62,8 @@ youtrack_jar:
     - mode: 440
     - require:
       - user: youtrack
+      - file: /usr/local/youtrack
+      - file: /var/lib/youtrack
 
 /etc/youtrack:
   file:
@@ -110,6 +112,7 @@ youtrack:
       - user: youtrack
       - pkg: jre-7
       - file: jre-7
+      - file: youtrack_jar
   process:
     - wait_socket
     - port: 8082

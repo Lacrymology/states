@@ -12,7 +12,7 @@ gitlab_sidekiq_procs:
 
 gitlab_unicorn_procs:
   description: Gitlab Unicorn Process
-  coo/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'bundle exec unicorn_rails'
+  command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'bundle exec unicorn_rails'
 
 gitlab_unicorn_port:
   description: Gitlab Unicorn Port
@@ -28,5 +28,4 @@ gitlab_git_http_server_procs:
                        salt['password.pillar']("gitlab:db:password"),
                        username=deployment) }}
 {{ nginx_instance(deployment, timeout=40, http_uri='/users/sign_in',
-                  extra_dependencies=('gitlab_uwsgi_worker',
-                                      'gitlabhq_production_postgresql')) }}
+                  extra_dependencies=('gitlabhq_production_postgresql',)) }}

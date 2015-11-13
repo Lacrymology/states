@@ -133,8 +133,6 @@ gitlab:ssl_redirect
 
 .. |deployment| replace:: gitlab
 
-.. include:: /uwsgi/doc/pillar.inc
-
 .. _pillar-gitlab-smtp:
 
 gitlab:smtp

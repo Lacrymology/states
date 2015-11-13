@@ -26,8 +26,6 @@ Critical:
   * There is no `Sidekiq <http://sidekiq.org/>`_ process running
   * There are more than one `Sidekiq <http://sidekiq.org/>`_ processes running
 
-.. include:: /uwsgi/doc/monitor.inc
-
 .. include:: /nginx/doc/monitor.inc
 
 .. _monitor-gitlabhq_production_postgresql:
@@ -52,6 +50,27 @@ gitlabhq_production_postgresql_not_empty
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Check if :doc:`/postgresql/doc/index` database is not empty.
+
+.. _monitor-gitlab-unicorn-procs:
+
+gitlab_unicorn_procs
+~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /nrpe/doc/check_procs.inc
+
+.. _monitor-gitlab-unicorn-port:
+
+gitlab_unicorn_port
+~~~~~~~~~~~~~~~~~~~
+
+Monitor :doc:`index` unicorn port :ref:`glossary-TCP` ``8084``.
+
+.. _monitor-gitlab-git-http-server:
+
+gitlab_git_http_server_procs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /nrpe/doc/check_procs.inc
 
 .. include:: /backup/doc/monitor.inc
 

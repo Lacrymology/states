@@ -1,0 +1,38 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+worker_processes {{ grains["num_cpus"] }}
+
+working_directory "/home/gitlab/gitlabhq-{{ version }}"
+
+listen "/var/run/gitlab/unicorn.sock", :backlog => 1024
+listen "127.0.0.1:8084", :tcp_nopush => true
+
+timeout 60
+
+stderr_path "/var/log/gitlab/unicorn.stderr.log"
+stdout_path "/var/log/gitlab/unicorn.stdout.log"
+
+preload_app true
+GC.respond_to?(:copy_on_write_friendly=) and
+  GC.copy_on_write_friendly = true
+
+check_client_connection false
+
+before_fork do |server, worker|
+  defined?(ActiveRecord::Base) and
+    ActiveRecord::Base.connection.disconnect!
+
+  old_pid = "#{server.config[:pid]}.oldbin"
+  if old_pid != server.pid
+    begin
+      sig = (worker.nr + 1) >= server.worker_processes ? :QUIT : :TTOU
+      Process.kill(sig, File.read(old_pid).to_i)
+    rescue Errno::ENOENT, Errno::ESRCH
+    end
+  end
+end
+
+after_fork do |server, worker|
+  defined?(ActiveRecord::Base) and
+    ActiveRecord::Base.establish_connection
+end

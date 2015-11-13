@@ -1,15 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
-
 # {{ salt['pillar.get']('message_do_not_modify') }}
-
-{#-
- To enable smtp email delivery for your GitLab instance do next:
- 1. Change config/environments/production.rb to use smtp
-    config.action_mailer.delivery_method = :smtp
- 2. Rename this file to smtp_settings.rb
- 3. Edit settings inside this file
- 4. Restart GitLab instance
-#}
 
 {%- if salt['pillar.get']('gitlab:smtp', False) %}
   {%- set smtp = salt['pillar.get']('gitlab:smtp', False) %}
@@ -31,5 +21,6 @@ if Gitlab::Application.config.action_mailer.delivery_method == :smtp
     enable_starttls_auto: false,
     tls: true,
 {%- endif %}
+    openssl_verify_mode: 'peer'
   }
 end

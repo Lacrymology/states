@@ -1,65 +1,32 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
-
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- if salt['pillar.get']('gitlab:smtp', False) %}
+  {%- set smtp = salt['pillar.get']('gitlab:smtp', False) %}
+{%- else %}
+  {%- set smtp = salt['pillar.get']('smtp') %}
+{%- endif %}
 
 production: &base
   gitlab:
     host: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
 {%- set ssl = salt['pillar.get']('gitlab:ssl', False) %}
     port: {% if ssl %}443{% else %}80{% endif %}
-    {%- if ssl %}
-    https: true
-    {%- else %}
-    https: false
-    {%- endif %}
+    https: {% if ssl %}true{% else %}false{% endif %}
 
     user: gitlab
 
-    {%- if salt['pillar.get']('gitlab:smtp', False) %}
-      {%- set smtp = salt['pillar.get']('gitlab:smtp', False) %}
-    {%- else %}
-      {%- set smtp = salt['pillar.get']('smtp') %}
-    {%- endif %}
     email_from: {{ smtp['from'] }}
+    email_display_name: Gitlab
+    {#- email_reply_to: noreply@example.com #}
 
-    default_projects_limit: {{ salt['pillar.get']('gitlab:default_projects_limit', 10) }}
-
-    {%- if not salt['pillar.get']('gitlab:default_can_create_group', True) %}
-    default_can_create_group: false
-    {%- endif %}
-
-    {%- if not salt['pillar.get']('gitlab:username_changing_enabled', True) %}
-    username_changing_enabled: false
-    {%- endif %}
-
-    {%- if salt['pillar.get']('gitlab:signup_enabled', False) %}
-    signup_enabled: true
-    {%- endif %}
-
-    {%- if not salt['pillar.get']('gitlab:signin_enabled', True) %}
-    signin_enabled: false
-    {%- endif %}
-
-    issue_closing_pattern: {{ salt['pillar.get']('gitlab:issue_closing_pattern', '([Cc]lose[sd]|[Ff]ixe[sd]) +#(\d+)') }}
+    default_can_create_group: true
+    username_changing_enabled: true
 
     default_projects_features:
-      issues: {{ salt['pillar.get']('gitlab:default_projects_features:issues', True)|lower() }}
-
-      merge_requests: {% if salt['pillar.get']('gitlab:default_projects_features:merge_requests', True) %}true{% else %}false{% endif %}
-
-      {%- if salt['pillar.get']('gitlab:default_projects_features:wiki', True) %}
+      issues: true
+      merge_requests: true
       wiki: true
-      {%- else %}
-      wiki: false
-      {%- endif %}
-
-      {%- if salt['pillar.get']('gitlab:default_projects_features:snippets', False) %}
-      snippets: true
-      {%- else %}
       snippets: false
-      {%- endif %}
-
-      visibility_level: "{{ salt['pillar.get']('gitlab:default_projects_features:visibility_level', 'private') }}"
 
     webhook_timeout: 10
 
@@ -69,34 +36,20 @@ production: &base
     enabled: true
 
   ldap:
-    {%- if salt['pillar.get']('gitlab:ldap:enabled', False) %}
-    {%- set ldap =  salt['pillar.get']('gitlab:ldap') %}
-    enabled: true
-    host: '{{ ldap['host'] }}'
-    base: '{{ ldap['base'] }}'
-    port: {{ ldap['port'] }}
-    uid: '{{ ldap['uid'] }}'
-    method: '{{ ldap['method'] }}'
-    bind_dn: '{{ ldap['bind_dn'] }}'
-    password: '{{ ldap['password'] }}'
-    allow_username_or_email_login: {{ ldap['allow_username_or_email_login']|default('true') }}
-    user_filter: ''
-    {%- else %}
     enabled: false
-    {%- endif %}
 
   omniauth:
     enabled: false
     allow_single_sign_on: false
     block_auto_created_users: true
+    auto_link_ldap_user: false
     providers:
 
   satellites:
     path: /home/gitlab/gitlab-satellites/
-    timeout: 30
 
   backup:
-    path: "/var/lib/gitlab/gitlab-backups"
+    path: /var/lib/gitlab/gitlab-backups
 
   gitlab_shell:
     path: /home/gitlab/gitlab-shell/
@@ -111,10 +64,15 @@ production: &base
 {%- if 22 in ports %}
     ssh_port: 22
 {%- else %}
-    ssh_port: {{ salt['pillar.get']('ssh:server:ports', [22])[0] }}
+    ssh_port: {{ ports[0] }}
 {%- endif %}
 
   git:
     bin_path: /usr/bin/git
     max_size: {{ salt['pillar.get']('gitlab:max_size', 5242880) }}
     timeout: {{ salt['pillar.get']('gitlab:commit_timeout', 30) }}
+
+  extra:
+
+  rack_attack:
+    git_basic_auth:

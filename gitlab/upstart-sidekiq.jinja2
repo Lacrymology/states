@@ -24,5 +24,8 @@ env USER="gitlab"
 env RAILS_ENV="production"
 
 script
-  ./bin/background_jobs start_no_deamonize
+  bundle exec sidekiq -q post_receive -q mailer -q archive_repo \
+         -q system_hook -q project_web_hook -q gitlab_shell \
+         -q incoming_email -q runner -q common -q default \
+         -e $RAILS_ENV
 end script

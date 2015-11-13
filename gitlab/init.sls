@@ -103,18 +103,6 @@ gitlab:
     - if_missing: /home/gitlab/gitlabhq-{{ version }}
     - require:
       - postgres_database: gitlab
-  file:
-    - managed
-    - name: /etc/init/gitlab.conf
-    - source: salt://gitlab/upstart.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - context:
-        version: {{ version }}
-    - require:
-      - file: gitlabhq-{{ version }}
   cmd:
     - wait
     - name: bundle exec rake gitlab:setup
@@ -133,23 +121,31 @@ gitlab:
       - file: /home/gitlab/gitlabhq-{{ version }}/log
     - watch:
       - postgres_database: gitlab
+
+gitlab_sidekiq:
+  file:
+    - managed
+    - name: /etc/init/gitlab-sidekiq.conf
+    - source: salt://gitlab/upstart-sidekiq.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - context:
+        version: {{ version }}
+    - require:
+      - file: gitlabhq-{{ version }}
   service:
     - running
-    - require:
-      - user: gitlab
+    - name: gitlab-sidekiq
     - watch:
       - archive: gitlab
       - cmd: gitlab
       - cmd: gitlab_gems
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/environments/production.rb
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb
       - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/secrets.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/log
-      - file: gitlab
+      - file: gitlab_sidekiq
+      - user: gitlab
 
 gitlabhq-{{ version }}:
   file:
@@ -429,7 +425,6 @@ gitlab_precompile_assets:
     - mode: 440
     - require:
       - pkg: logrotate
-      - file: gitlab
     - context:
         version: {{ version }}
 
@@ -459,7 +454,16 @@ gitlab_unicorn:
     - running
     - name: gitlab-unicorn
     - watch:
+      - archive: gitlab
+      - cmd: gitlab
+      - cmd: gitlab_gems
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/environments/production.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb
       - file: /home/gitlab/gitlabhq-{{ version }}/config/unicorn.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/secrets.yml
       - file: gitlab_unicorn
       - postgres_database: gitlab
       - user: web

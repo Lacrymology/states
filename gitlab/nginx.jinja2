@@ -114,7 +114,7 @@ server {
     }
 
     location ~ ^/(assets)/ {
-        root /home/git/gitlab/public;
+        root /home/gitlab/gitlabhq-{{ version }}/public;
         gzip_static on;
         expires max;
         add_header Cache-Control public;

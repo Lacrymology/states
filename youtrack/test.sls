@@ -16,6 +16,17 @@ test:
     - require:
       - sls: youtrack
       - sls: youtrack.diamond
+  pkg:
+    - installed
+    - name: curl
+    - require:
+      - cmd: apt_sources
+  cmd:
+    - run
+    - name: 'curl --max-time 60 localhost:8082 || true'
+    - require:
+      - pkg: test
+      - process: youtrack
   monitoring:
     - run_all_checks
     - order: last

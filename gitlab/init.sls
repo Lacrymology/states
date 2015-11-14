@@ -327,6 +327,8 @@ gitlab_shell:
       - RAILS_ENV: production
     - require:
       - cmd: gitlab_gems
+      - file: /var/log/gitlab/gitlab-shell
+      - file: /home/gitlab/gitlabhq-{{ version }}/log
       - pkg: git
     - watch:
       - archive: gitlab

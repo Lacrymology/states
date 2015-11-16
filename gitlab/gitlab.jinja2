@@ -5,11 +5,12 @@
 {%- else %}
   {%- set smtp = salt['pillar.get']('smtp') %}
 {%- endif %}
-
+{%- set ssl = salt['pillar.get']('gitlab:ssl', False) %}
+{%- set ports = salt['pillar.get']('ssh:server:ports', [22]) %}
+{%- set incoming_email = salt["pillar.get"]("gitlab:incoming_email", False) %}
 production: &base
   gitlab:
     host: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
-{%- set ssl = salt['pillar.get']('gitlab:ssl', False) %}
     port: {% if ssl %}443{% else %}80{% endif %}
     https: {% if ssl %}true{% else %}false{% endif %}
 
@@ -17,8 +18,6 @@ production: &base
 
     email_from: {{ smtp['from'] }}
     email_display_name: Gitlab
-    {#- email_reply_to: noreply@example.com #}
-
     default_can_create_group: true
     username_changing_enabled: true
 
@@ -31,6 +30,19 @@ production: &base
     webhook_timeout: 10
 
     repository_downloads_path: /var/lib/gitlab/repositories
+
+{%- if incoming_email %}
+  incoming_email:
+    enabled: true
+    address: '{{ incoming_email["address"] }}'
+    user: '{{ incoming_email["user"] }}'
+    password: '{{ incoming_email["password"] }}'
+    host: '{{ incoming_email["host"] }}'
+    port: {{ incoming_email["port"] }}
+    ssl: {{ incoming_email["ssl"]|default(True)|lower }}
+    start_tls: {{ incoming_email["start_tls"]|default(False)|lower }}
+    mailbox: "inbox"
+{%- endif %}
 
   gravatar:
     enabled: true
@@ -52,15 +64,14 @@ production: &base
     path: /var/lib/gitlab/gitlab-backups
 
   gitlab_shell:
-    path: /home/gitlab/gitlab-shell/
+    path: /home/gitlab/gitlab-shell-{{ gitlab_shell_version }}/
 
     repos_path: /home/gitlab/repositories/
-    hooks_path: /home/gitlab/gitlab-shell/hooks/
+    hooks_path: /home/gitlab/gitlab-shell-{{ gitlab_shell_version }}/hooks/
 
     upload_pack: true
     receive_pack: true
 
-{%- set ports = salt['pillar.get']('ssh:server:ports', [22]) %}
 {%- if 22 in ports %}
     ssh_port: 22
 {%- else %}

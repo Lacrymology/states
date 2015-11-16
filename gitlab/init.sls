@@ -1,9 +1,11 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- from "upstart/absent.sls" import upstart_absent with context %}
 {%- set ssl = salt['pillar.get']('gitlab:ssl', False) %}
 {%- set gem_source = salt["pillar.get"]("gem_source", "https://rubygems.org") %}
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- set mirror = files_archive if files_archive else "http://archive.robotinfra.com" %}
+{%- set incoming_email = salt["pillar.get"]("gitlab:incoming_email", False) %}
 include:
   - apt
   - build
@@ -521,6 +523,33 @@ gitlab_git_http_server:
       - archive: gitlab_git_http_server
       - file: gitlab_git_http_server
       - user: web
+
+{%-  if incoming_email %}
+gitlab_mail_room:
+  file:
+    - managed
+    - name: /etc/init/gitlab-mail-room.conf
+    - source: salt://gitlab/upstart-mail-room.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - context:
+        version: {{ version }}
+    - require:
+      - file: gitlabhq-{{ version }}
+  service:
+    - running
+    - name: gitlab-mail-room
+    - watch:
+      - cmd: gitlab
+      - cmd: gitlab_gems
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
+      - file: gitlab_mail_room
+      - user: gitlab
+{%- else %}
+{{ upstart_absent('gitlab-mail-room') }}
+{%- endif %}
 
 {%- if ssl %}
 extend:

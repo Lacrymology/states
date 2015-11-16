@@ -30,6 +30,7 @@ include:
 {%- set version = "8.1.4" %}
 {%- set hash = "md5=3782527645a8baf62da8a4f9caf1f421" %}
 {%- set gitlab_shell_version = "2.6.6" %}
+{%- set gitlab_shell_hash = "md5=fee423ec90551bb7469f8e70ca7be83c" %}
 {%- set gitlab_git_http_server_version = "0.3.0" %}
 
 {%- if grains["osarch"] == "amd64" %}
@@ -115,10 +116,10 @@ gitlab:
     - user: gitlab
     - cwd: /home/gitlab/gitlabhq-{{ version }}
     - require:
-      - file: gitlab_shell
       - service: redis
       - cmd: gitlab_gems
       - file: gitlabhq-{{ version }}
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/log
     - watch:
@@ -144,6 +145,8 @@ gitlab_sidekiq:
       - archive: gitlab
       - cmd: gitlab
       - cmd: gitlab_gems
+      - cmd: gitlab_shell
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/log
       - file: gitlab_sidekiq
@@ -191,6 +194,8 @@ gitlabhq-{{ version }}:
     - user: root
     - group: gitlab
     - mode: 440
+    - context:
+        gitlab_shell_version: {{ gitlab_shell_version }}
     - require:
       - file: gitlabhq-{{ version }}
       - file: /var/lib/gitlab
@@ -341,36 +346,52 @@ gitlab_gems:
       - archive: gitlab
 
 gitlab_shell:
-  cmd:
-    - wait
-    - name: bundle exec rake gitlab:shell:install[v{{ gitlab_shell_version}}]
-    - user: gitlab
-    - cwd: /home/gitlab/gitlabhq-{{ version }}
-    - env:
-      - REDIS_URL: unix:/var/run/redis/redis.sock
-      - RAILS_ENV: production
-    - require:
-      - cmd: gitlab_gems
-      - file: /var/log/gitlab/gitlab-shell
-      - file: /home/gitlab/gitlabhq-{{ version }}/log
-      - pkg: git
-    - watch:
-      - archive: gitlab
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
   file:
     - managed
-    - name: /home/gitlab/gitlab-shell/config.yml
+    - name: /home/gitlab/gitlab-shell-{{ gitlab_shell_version }}/config.yml
     - source: salt://gitlab/gitlab-shell.jinja2
     - template: jinja
     - user: gitlab
     - group: gitlab
-    - mode: 640  {# gitlab_shell setup needs write permission #}
+    - mode: 440
     - require:
-      - file: /var/log/gitlab/gitlab-shell
-      - cmd: gitlab_shell
+      - archive: gitlab_shell
+  archive:
+    - extracted
+    - name: /home/gitlab
+{%- if files_archive %}
+    - source: "{{ files_archive }}/mirror/gitlab/\
+               gitlab-shell-{{ gitlab_shell_version }}.tar.gz"
+{%- else %}
+    - source: "https://github.com/gitlabhq/gitlab-shell/archive/\
+               v{{ gitlab_shell_version }}.tar.gz"
+{%- endif %}
+    - source_hash: {{ gitlab_shell_hash }}
+    - archive_format: tar
+    - tar_options: xz
+    - if_missing: /home/gitlab/gitlab-shell-{{ gitlab_shell_version }}
+    - require:
+      - user: gitlab
+  cmd:
+    - wait
+    - name: ./bin/install && ./bin/create-hooks
+    - user: gitlab
+    - cwd: /home/gitlab/gitlab-shell-{{ gitlab_shell_version }}
+    - require:
+      - file: /home/gitlab/gitlab-shell-{{ gitlab_shell_version }}
+    - watch:
+      - archive: gitlab_shell
+      - file: gitlab_shell
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
+
+/home/gitlab/gitlab-shell-{{ gitlab_shell_version }}:
+  file:
+    - directory
+    - user: gitlab
+    - group: gitlab
+    - mode: 755
+    - require:
+      - archive: gitlab_shell
 
 /etc/nginx/conf.d/gitlab.conf:
   file:
@@ -415,14 +436,6 @@ gitlab_precompile_assets:
       - user: gitlab
 
 /var/log/gitlab/gitlabhq:
-  file:
-    - directory
-    - user: gitlab
-    - group: gitlab
-    - require:
-      - file: /var/log/gitlab
-
-/var/log/gitlab/gitlab-shell:
   file:
     - directory
     - user: gitlab
@@ -482,6 +495,7 @@ gitlab_unicorn:
     - watch:
       - archive: gitlab
       - cmd: gitlab
+      - cmd: gitlab_shell
       - cmd: gitlab_gems
       - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/config/environments/production.rb

@@ -161,6 +161,28 @@ gitlabhq-{{ version }}:
     - require:
       - archive: gitlab
 
+/home/gitlab/repositories:
+  file:
+    - directory
+    - user: gitlab
+    - group: gitlab
+    - mode: 2750
+    - require:
+      - user: gitlab
+    - require_in:
+      - file: gitlabhq-{{ version }}
+
+/home/gitlab/gitlabhq-{{ version }}/public/uploads:
+  file:
+    - directory
+    - user: gitlab
+    - group: gitlab
+    - mode: 750
+    - require:
+      - archive: gitlab
+    - require_in:
+      - file: gitlabhq-{{ version }}
+
 /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml:
   file:
     - managed

@@ -17,7 +17,7 @@ respawn limit 10 5
 chdir /home/gitlab/gitlabhq-{{ version }}
 
 setuid gitlab
-setgid redis
+setgid gitlab
 
 env HOME="/home/gitlab"
 env USER="gitlab"

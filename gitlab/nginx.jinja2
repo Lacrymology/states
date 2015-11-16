@@ -1,10 +1,14 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
-
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
 {%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
 upstream gitlab {
-    server unix:///var/lib/uwsgi/gitlab.sock;
+    server unix:///var/run/gitlab/unicorn.sock;
+}
+
+upstream gitlab-git-http-server {
+  server unix:///var/run/gitlab/gitlab-git-http-server.sock;
 }
 
 server {
@@ -26,7 +30,7 @@ server {
 {# web app logic #}
     server_name {% for hostname in  salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root /home/gitlab/gitlabhq-{{ version }}/public;
-    client_max_body_size 5m;
+    client_max_body_size 20m;
     server_tokens off;
 
 {% include "nginx/block_hacks.jinja2" %}
@@ -38,28 +42,85 @@ server {
         </html>";
     }
 
-{#- GitLab clone/push via https is broken, block it #}
-    location ~ \.git$ {
-        return 404;
-    }
-
     location / {
         try_files $uri $uri/index.html $uri.html @gitlab;
     }
 
-    location @gitlab {
+    location /uploads/ {
         gzip off;
-        uwsgi_modifier1 7;
-        include uwsgi_params;
-        uwsgi_pass gitlab;
+
+        proxy_read_timeout      300;
+        proxy_connect_timeout   300;
+        proxy_redirect          off;
+
+        proxy_set_header    Host                $http_host;
+        proxy_set_header    X-Real-IP           $remote_addr;
+        proxy_set_header    X-Forwarded-Ssl     on;
+        proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Proto   $scheme;
+        proxy_set_header    X-Frame-Options     SAMEORIGIN;
+
+        proxy_pass http://gitlab;
     }
 
-{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
-    {{ robots_location() }}
+    location @gitlab {
+        gzip off;
 
-    location /assets/ {
+        proxy_read_timeout      300;
+        proxy_connect_timeout   300;
+        proxy_redirect          off;
+
+        proxy_set_header    Host                $http_host;
+        proxy_set_header    X-Real-IP           $remote_addr;
+        proxy_set_header    X-Forwarded-Ssl     on;
+        proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Proto   $scheme;
+        proxy_set_header    X-Frame-Options     SAMEORIGIN;
+
+        proxy_pass http://gitlab;
+    }
+
+    location ~ ^/[\w\.-]+/[\w\.-]+/(info/refs|git-upload-pack|git-receive-pack)$ {
+        error_page 418 = @gitlab-git-http-server;
+        return 418;
+    }
+
+    location ~ ^/[\w\.-]+/[\w\.-]+/repository/archive {
+        error_page 418 = @gitlab-git-http-server;
+        return 418;
+    }
+
+    location ~ ^/api/v3/projects/.*/repository/archive {
+        error_page 418 = @gitlab-git-http-server;
+        return 418;
+    }
+
+    location @gitlab-git-http-server {
+        gzip off;
+
+        proxy_read_timeout      300;
+        proxy_connect_timeout   300;
+        proxy_redirect          off;
+
+        proxy_buffering off;
+
+
+        proxy_set_header    Host                $http_host;
+        proxy_set_header    X-Real-IP           $remote_addr;
+        proxy_set_header    X-Forwarded-Ssl     on;
+        proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Proto   $scheme;
+        proxy_pass http://gitlab-git-http-server;
+    }
+
+    location ~ ^/(assets)/ {
+        root /home/gitlab/gitlabhq-{{ version }}/public;
         gzip_static on;
         expires max;
         add_header Cache-Control public;
     }
+
+    error_page 502 /502.html;
+
+    {{ robots_location() }}
 }

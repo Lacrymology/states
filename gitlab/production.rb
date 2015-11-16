@@ -1,6 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
-
 Gitlab::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -14,8 +13,9 @@ Gitlab::Application.configure do
   # Disable Rails's static asset server (Apache or nginx will already do this)
   config.serve_static_assets = false
 
-  # Compress JavaScripts and CSS
-  config.assets.compress = true
+  # Compress JavaScripts and CSS.
+  config.assets.js_compressor = :uglifier
+  # config.assets.css_compressor = :sass
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = true
@@ -77,7 +77,6 @@ Gitlab::Application.configure do
   config.action_mailer.raise_delivery_errors = true
 
   config.eager_load = true
-  config.assets.js_compressor = :uglifier
 
   config.allow_concurrency = false
 end

@@ -6,7 +6,7 @@ include:
   - cron
   - sudo
 
-{%- set version = '7.3.2' %}
+{%- set version = '8.1.4' %}
 
 backup-gitlab:
   file:

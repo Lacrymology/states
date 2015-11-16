@@ -36,8 +36,9 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('gitlab') }}
-    {{ diamond_process_test('uwsgi-gitlab') }}
+    {{ diamond_process_test('gitlab-sidekiq') }}
+    {{ diamond_process_test('gitlab-unicorn') }}
+    {{ diamond_process_test('gitlab-git-http-server') }}
     - require:
       - sls: gitlab
       - sls: gitlab.diamond

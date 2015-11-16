@@ -2,28 +2,45 @@
 
 {%- set ssl = salt['pillar.get']('gitlab:ssl', False) %}
 {%- set gem_source = salt["pillar.get"]("gem_source", "https://rubygems.org") %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- set mirror = files_archive if files_archive else "http://archive.robotinfra.com" %}
 include:
   - apt
   - build
   - git
   - logrotate
   - nginx
+  - nodejs
   - postgresql.server
   - python
   - redis
   - ruby.2
   - ssh.server
-{%- if ssl %}
-  - ssl
-{%- endif %}
   - ssl.dev
-  - uwsgi.ruby2
+  - sudo
   - web
   - xml
   - yaml
+{%- if ssl %}
+  - ssl
+{%- endif %}
 
-{%- set version = '7.3.2' %}
-{%- set gitlab_shell_version = '2.0.1' %}
+{%- set version = "8.1.4" %}
+{%- set hash = "md5=3782527645a8baf62da8a4f9caf1f421" %}
+{%- set gitlab_shell_version = "2.6.6" %}
+{%- set gitlab_git_http_server_version = "0.3.0" %}
+
+{%- if grains["osarch"] == "amd64" %}
+  {%- set goarch = "amd64" %}
+  {%- set gitlab_git_http_server_hash = "md5=e3bc8da0b0103907b0e97021e66a9454" %}
+{%- elif grains["osarch"] == "amd64" %}
+  {%- set goarch = "386" %}
+  {%- set gitlab_git_http_server_hash = "md5=bf1dd0c3fd29fd56d41c757d8ccf02b7" %}
+{%- endif %}
+{%- set gitlab_git_http_server_source =
+  "%s/mirror/gitlab/gitlab-git-http-server-%s-%s.tar.bz2" %
+  (mirror, gitlab_git_http_server_version, goarch)
+%}
 
 gitlab_dependencies:
   pkg:
@@ -75,30 +92,17 @@ gitlab:
   archive:
     - extracted
     - name: /home/gitlab
-{%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- if files_archive %}
-    - source: {{ files_archive }}/mirror/gitlab-{{ version }}.tar.gz
+    - source: {{ files_archive }}/mirror/gitlab/gitlabhq-{{ version }}.tar.gz
 {%- else %}
     - source: https://github.com/gitlabhq/gitlabhq/archive/v{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=e8e83ec258f621edea4214d3c0330c87
+    - source_hash: {{ hash }}
     - archive_format: tar
     - tar_options: z
     - if_missing: /home/gitlab/gitlabhq-{{ version }}
     - require:
       - postgres_database: gitlab
-  file:
-    - managed
-    - name: /etc/init/gitlab.conf
-    - source: salt://gitlab/upstart.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - context:
-        version: {{ version }}
-    - require:
-      - file: gitlabhq-{{ version }}
   cmd:
     - wait
     - name: bundle exec rake gitlab:setup
@@ -117,22 +121,31 @@ gitlab:
       - file: /home/gitlab/gitlabhq-{{ version }}/log
     - watch:
       - postgres_database: gitlab
+
+gitlab_sidekiq:
+  file:
+    - managed
+    - name: /etc/init/gitlab-sidekiq.conf
+    - source: salt://gitlab/upstart-sidekiq.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - context:
+        version: {{ version }}
+    - require:
+      - file: gitlabhq-{{ version }}
   service:
     - running
-    - require:
-      - user: gitlab
+    - name: gitlab-sidekiq
     - watch:
       - archive: gitlab
       - cmd: gitlab
       - cmd: gitlab_gems
-      - file: gitlab
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
       - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/log
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/environments/production.rb
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb
+      - file: gitlab_sidekiq
+      - user: gitlab
 
 gitlabhq-{{ version }}:
   file:
@@ -146,33 +159,50 @@ gitlabhq-{{ version }}:
     - require:
       - archive: gitlab
 
-/home/gitlab/gitlab-satellites:
-  file:
-    - directory
-    - user: gitlab
-    - group: gitlab
-    - mode: 750
-    - require:
-      - user: gitlab
-
 /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml:
   file:
     - managed
     - source: salt://gitlab/gitlab.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - require:
       - file: gitlabhq-{{ version }}
       - file: /var/lib/gitlab
 
+/home/gitlab/gitlabhq-{{ version }}/config/secrets.yml:
+  file:
+    - managed
+    - source: salt://gitlab/secrets.jinja2
+    - template: jinja
+    - user: root
+    - group: gitlab
+    - mode: 440
+    - context:
+        db_key_base: {{ salt["pillar.get"]("gitlab:db_key_base") }}
+    - require:
+      - file: gitlabhq-{{ version }}
+
+/home/gitlab/gitlabhq-{{ version }}/config/unicorn.rb:
+  file:
+    - managed
+    - source: salt://gitlab/unicorn.jinja2
+    - template: jinja
+    - user: root
+    - group: gitlab
+    - mode: 440
+    - context:
+        version: {{ version }}
+    - require:
+      - file: gitlabhq-{{ version }}
+
 /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb:
   file:
     - managed
     - source: salt://gitlab/rack_attack.rb.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - require:
@@ -183,7 +213,7 @@ gitlabhq-{{ version }}:
     - managed
     - source: salt://gitlab/resque.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - require:
@@ -194,7 +224,7 @@ gitlabhq-{{ version }}:
     - managed
     - source: salt://gitlab/database.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - require:
@@ -205,7 +235,7 @@ gitlabhq-{{ version }}:
     - managed
     - source: salt://gitlab/gitconfig.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - require:
@@ -215,7 +245,7 @@ gitlabhq-{{ version }}:
   file:
     - managed
     - source: salt://gitlab/production.rb
-    - user: gitlab
+    - user: root
     - group: gitlab
     - template: jinja
     - mode: 440
@@ -229,7 +259,7 @@ gitlabhq-{{ version }}:
   file:
     - managed
     - source: salt://gitlab/smtp.jinja2
-    - user: gitlab
+    - user: root
     - group: gitlab
     - template: jinja
     - mode: 440
@@ -243,7 +273,7 @@ gitlabhq-{{ version }}:
   file:
     - managed
     - source: salt://gitlab/admin.jinja2
-    - user: gitlab
+    - user: root
     - group: gitlab
     - template: jinja
     - mode: 440
@@ -258,7 +288,7 @@ gitlabhq-{{ version }}:
   file:
     - managed
     - source: salt://gitlab/{{ file }}.jinja2
-    - user: gitlab
+    - user: root
     - group: gitlab
     - template: jinja
     - mode: 440
@@ -267,6 +297,8 @@ gitlabhq-{{ version }}:
       - file: gitlabhq-{{ version }}
     - context:
         gem_source: {{ gem_source }}
+    - require:
+      - file: gitlabhq-{{ version }}
     - require_in:
       - cmd: gitlab_gems
 {%- endfor %}
@@ -274,7 +306,9 @@ gitlabhq-{{ version }}:
 gitlab_gems:
   cmd:
     - wait
-    - name: bundle install --deployment --without development test mysql aws
+    - name: >-
+        bundle install -j {{ grains["num_cpus"] }}
+        --deployment --without development test mysql aws kerberos
     - user: gitlab
     - cwd: /home/gitlab/gitlabhq-{{ version }}
     - require:
@@ -293,6 +327,8 @@ gitlab_shell:
       - RAILS_ENV: production
     - require:
       - cmd: gitlab_gems
+      - file: /var/log/gitlab/gitlab-shell
+      - file: /home/gitlab/gitlabhq-{{ version }}/log
       - pkg: git
     - watch:
       - archive: gitlab
@@ -312,41 +348,6 @@ gitlab_shell:
       - file: /var/log/gitlab/gitlab-shell
       - cmd: gitlab_shell
 
-gitlab-uwsgi:
-  file:
-    - managed
-    - name: /etc/uwsgi/gitlab.yml
-    - source: salt://gitlab/uwsgi.jinja2
-    - template: jinja
-    - user: root
-    - group: gitlab
-    - mode: 440
-    - context:
-        appname: gitlab
-        chdir: /home/gitlab/gitlabhq-{{ version }}
-        rack: config.ru
-        uid: gitlab
-        gid: gitlab
-    - require:
-      - file: gitlabhq-{{ version }}
-      - file: gitlab_shell
-      - service: uwsgi
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/gitlab.yml
-    - require:
-      - file: gitlab-uwsgi
-    - watch:
-      - cmd: gitlab_gems
-      - file: gitlab_shell
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
-      - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
-      - file: /home/gitlab/gitlabhq-{{ version }}/log
-      - user: gitlab
-
 /etc/nginx/conf.d/gitlab.conf:
   file:
     - managed
@@ -358,7 +359,6 @@ gitlab-uwsgi:
     - require:
       - pkg: nginx
       - user: web
-      - file: gitlab-uwsgi
 {%- if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- endif %}
@@ -376,6 +376,8 @@ gitlab_precompile_assets:
     - user: gitlab
     - cwd: /home/gitlab/gitlabhq-{{ version }}
     - unless: test -d /home/gitlab/gitlabhq-{{ version }}/public/assets/
+    - require:
+      - pkg: nodejs
     - watch:
       - cmd: gitlab
       - cmd: gitlab_gems
@@ -413,7 +415,7 @@ gitlab_precompile_assets:
     - group: gitlab
     - require:
       - file: /var/log/gitlab/gitlabhq
-      - archive: gitlab
+      - file: gitlabhq-{{ version }}
 
 /etc/logrotate.d/gitlab:
   file:
@@ -425,7 +427,6 @@ gitlab_precompile_assets:
     - mode: 440
     - require:
       - pkg: logrotate
-      - file: gitlab
     - context:
         version: {{ version }}
 
@@ -436,6 +437,90 @@ gitlab_precompile_assets:
     - group: gitlab
     - require:
       - user: gitlab
+
+gitlab_unicorn:
+  file:
+    - managed
+    - name: /etc/init/gitlab-unicorn.conf
+    - source: salt://gitlab/upstart-unicorn.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - context:
+        version: {{ version }}
+    - require:
+      - file: gitlabhq-{{ version }}
+      - pkg: sudo
+  service:
+    - running
+    - name: gitlab-unicorn
+    - watch:
+      - archive: gitlab
+      - cmd: gitlab
+      - cmd: gitlab_gems
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/environments/production.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/unicorn.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/secrets.yml
+      - file: gitlab_unicorn
+      - postgres_database: gitlab
+      - user: web
+
+/usr/local/gitlab-git-http-server:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 555
+    - require:
+      - file: /usr/local
+
+/usr/local/gitlab-git-http-server/{{ gitlab_git_http_server_version }}:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 555
+    - require:
+      - file: /usr/local/gitlab-git-http-server
+
+gitlab_git_http_server:
+  archive:
+    - extracted
+    - name: /usr/local/gitlab-git-http-server/{{ gitlab_git_http_server_version }}
+    - source: {{ gitlab_git_http_server_source }}
+    - source_hash: {{ gitlab_git_http_server_hash }}
+    - archive_format: tar
+    - tar_options: oj
+    - if_missing: /usr/local/gitlab-git-http-server/{{ gitlab_git_http_server_version }}/gitlab-git-http-server
+    - require:
+      - file: /usr/local/gitlab-git-http-server
+  file:
+    - managed
+    - name: /etc/init/gitlab-git-http-server.conf
+    - source: salt://gitlab/upstart-gitlab-git-http-server.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - context:
+        version: {{ gitlab_git_http_server_version }}
+    - require:
+      - file: gitlabhq-{{ version }}
+      - pkg: sudo
+  service:
+    - running
+    - name: gitlab-git-http-server
+    - require:
+      - service: gitlab-unicorn
+    - watch:
+      - archive: gitlab_git_http_server
+      - file: gitlab_git_http_server
+      - user: web
 
 {%- if ssl %}
 extend:

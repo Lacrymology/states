@@ -1,0 +1,25 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+description "Gitlab Git HTTP Server"
+
+start on (net-device-up
+          and local-filesystems
+          and runlevel [2345])
+stop on runlevel [!2345]
+
+respawn
+respawn limit 10 5
+
+pre-start script
+  install -o gitlab -g  www-data -m 750 -d /var/run/gitlab
+end script
+
+script
+  sudo -E -H -u gitlab -g www-data \
+       /usr/local/gitlab-git-http-server/{{ version }}/gitlab-git-http-server \
+       -listenUmask 0 -listenNetwork unix \
+       -listenAddr /var/run/gitlab/gitlab-git-http-server.sock  \
+       -authBackend http://127.0.0.1:8084 \
+       /home/git/repositories
+end script

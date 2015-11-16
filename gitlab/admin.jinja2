@@ -1,27 +1,31 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
-
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-password = ENV['GITLAB_ROOT_PASSWORD']
+if ENV['GITLAB_ROOT_PASSWORD'].blank?
+  password = '5iveL!fe'
+  expire_time = Time.now
+else
+  password = ENV['GITLAB_ROOT_PASSWORD']
+  expire_time = nil
+end
 
 admin = User.create(
   email: "{{ salt['pillar.get']('gitlab:admin:email', False)|default(salt['pillar.get']('smtp:from'), boolean=True) }}",
   name: "Administrator",
   username: 'root',
   password: password,
-  password_confirmation: password,
-  password_expires_at: Time.now,
-  theme_id: Gitlab::Theme::MARS
+  password_expires_at: expire_time,
+  theme_id: Gitlab::Themes::APPLICATION_DEFAULT
 
 )
 
 admin.projects_limit = 10000
 admin.admin = true
 admin.save!
-admin.confirm!
+admin.confirm
 
 if admin.valid?
-puts %q[
+puts %Q[
 Administrator account created:
 
 login.........root

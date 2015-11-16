@@ -1,11 +1,11 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
-{%- call uwsgi_diamond('gitlab') %}
-- postgresql.server.diamond
-- redis.diamond
-- ssh.server.diamond
-{%- endcall %}
+include:
+  - nginx.diamond
+  - nodejs.diamond
+  - postgresql.server.diamond
+  - redis.diamond
+  - ssh.server.diamond
 
 gitlab_diamond_resources:
   file:
@@ -16,5 +16,9 @@ gitlab_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[gitlab]]
-        cmdline = ^sidekiq 2\.17\.0 gitlabhq
+        [[gitlab-sidekiq]]
+        cmdline = ^sidekiq.+gitlabhq
+        [[gitlab-unicorn]]
+        cmdline = unicorn_rails
+        [[gitlab-git-http-server]]
+        name = gitlab-git-http

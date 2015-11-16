@@ -5,6 +5,3 @@ Metrics
 
 * ``gitlab`` - `sidekiq <http://sidekiq.org/>`_ use by
   :doc:`index` for background processing.
-
-* :doc:`/uwsgi/doc/index` master and worker(s) process of
-  :doc:`index`

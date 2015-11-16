@@ -91,7 +91,9 @@
   "ejabberd",
   "elasticsearch",
   "etherpad",
-  "gitlab",
+  "gitlab-sidekiq",
+  "gitlab-unicorn",
+  "gitlab-git-http-server",
   "graylog-server",
   "graylog-web",
   "jenkins",
@@ -262,7 +264,8 @@ extend:
       - require:
         - service: ejabberd
         - service: etherpad
-        - service: gitlab
+        - service: gitlab-sidekiq
+        - service: gitlab-unicorn
         - service: pgbouncer
         - service: proftpd
         - service: uwsgi
@@ -275,7 +278,7 @@ extend:
   redis:
     service:
       - require:
-        - service: gitlab
+        - service: gitlab-sidekiq
   nsca_passive:
     service:
       - require_in: {{ local.requisites|yaml }}

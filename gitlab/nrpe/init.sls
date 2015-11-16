@@ -9,15 +9,16 @@ include:
   - git.nrpe
   - logrotate.nrpe
   - nginx.nrpe
+  - nodejs.nrpe
   - postgresql.server.nrpe
   - python.nrpe
   - redis.nrpe
   - ssh.server.nrpe
+  - sudo.nrpe
+  - xml.nrpe
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
-  - uwsgi.nrpe
-  - xml.nrpe
 
 {{ passive_check('gitlab', check_ssl_score=True) }}
 

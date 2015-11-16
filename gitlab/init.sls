@@ -164,7 +164,7 @@ gitlabhq-{{ version }}:
     - managed
     - source: salt://gitlab/gitlab.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - require:
@@ -176,9 +176,9 @@ gitlabhq-{{ version }}:
     - managed
     - source: salt://gitlab/secrets.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
-    - mode: 400
+    - mode: 440
     - context:
         db_key_base: {{ salt["pillar.get"]("gitlab:db_key_base") }}
     - require:
@@ -189,7 +189,7 @@ gitlabhq-{{ version }}:
     - managed
     - source: salt://gitlab/unicorn.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - context:
@@ -202,7 +202,7 @@ gitlabhq-{{ version }}:
     - managed
     - source: salt://gitlab/rack_attack.rb.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - require:
@@ -213,7 +213,7 @@ gitlabhq-{{ version }}:
     - managed
     - source: salt://gitlab/resque.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - require:
@@ -224,7 +224,7 @@ gitlabhq-{{ version }}:
     - managed
     - source: salt://gitlab/database.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - require:
@@ -235,7 +235,7 @@ gitlabhq-{{ version }}:
     - managed
     - source: salt://gitlab/gitconfig.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - require:
@@ -245,7 +245,7 @@ gitlabhq-{{ version }}:
   file:
     - managed
     - source: salt://gitlab/production.rb
-    - user: gitlab
+    - user: root
     - group: gitlab
     - template: jinja
     - mode: 440
@@ -259,7 +259,7 @@ gitlabhq-{{ version }}:
   file:
     - managed
     - source: salt://gitlab/smtp.jinja2
-    - user: gitlab
+    - user: root
     - group: gitlab
     - template: jinja
     - mode: 440
@@ -273,7 +273,7 @@ gitlabhq-{{ version }}:
   file:
     - managed
     - source: salt://gitlab/admin.jinja2
-    - user: gitlab
+    - user: root
     - group: gitlab
     - template: jinja
     - mode: 440
@@ -288,7 +288,7 @@ gitlabhq-{{ version }}:
   file:
     - managed
     - source: salt://gitlab/{{ file }}.jinja2
-    - user: gitlab
+    - user: root
     - group: gitlab
     - template: jinja
     - mode: 440

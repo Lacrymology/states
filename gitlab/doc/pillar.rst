@@ -61,10 +61,8 @@ Example: ``'123456789'``
 gitlab:db_key_base
 ~~~~~~~~~~~~~~~~~~
 
-Used to encrypt for variables. Ensure that you don't lose it.  If you change or
-lose this key you will be unable to access variables stored in database.  Make
-sure the secret is at least 30 characters and all random, no
-regular words or you'll be exposed to dictionary attacks.
+Used to encrypt for variables, required to access variables stored in database,
+use at least 30 random characters.
 
 Optional
 --------

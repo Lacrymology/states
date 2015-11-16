@@ -21,6 +21,5 @@ if Gitlab::Application.config.action_mailer.delivery_method == :smtp
     enable_starttls_auto: false,
     tls: true,
 {%- endif %}
-    openssl_verify_mode: 'peer'
   }
 end

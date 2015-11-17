@@ -22,7 +22,5 @@ pre-start script
   install -o gitlab -g  www-data -m 750 -d /var/run/gitlab
 end script
 
-script
-  sudo -E -H -u gitlab -g www-data bundle exec unicorn_rails -c \
-       /home/gitlab/gitlabhq-{{ version }}/config/unicorn.rb -E "$RAILS_ENV"
-end script
+exec sudo -E -H -u gitlab -g www-data bundle exec unicorn_rails -c \
+  /home/gitlab/gitlabhq-{{ version }}/config/unicorn.rb -E "$RAILS_ENV"

@@ -22,7 +22,5 @@ env HOME="/home/gitlab"
 env USER="gitlab"
 env RAILS_ENV="production"
 
-script
-  bundle exec mail_room -q \
-         -c /home/gitlab/gitlabhq-{{ version }}/config/mail_room.yml
-end script
+exec bundle exec mail_room -q \
+  -c /home/gitlab/gitlabhq-{{ version }}/config/mail_room.yml

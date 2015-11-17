@@ -15,11 +15,10 @@ pre-start script
   install -o gitlab -g  www-data -m 750 -d /var/run/gitlab
 end script
 
-script
-  sudo -E -H -u gitlab -g www-data \
-       /usr/local/gitlab-git-http-server/{{ version }}/gitlab-git-http-server \
-       -listenUmask 0 -listenNetwork unix \
-       -listenAddr /var/run/gitlab/gitlab-git-http-server.sock  \
-       -authBackend http://127.0.0.1:8084 \
-       /home/git/repositories
-end script
+
+exec sudo -E -H -u gitlab -g www-data \
+  /usr/local/gitlab-git-http-server/{{ version }}/gitlab-git-http-server \
+  -listenUmask 0 -listenNetwork unix \
+  -listenAddr /var/run/gitlab/gitlab-git-http-server.sock  \
+  -authBackend http://127.0.0.1:8084 \
+  /home/git/repositories

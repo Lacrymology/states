@@ -11,10 +11,12 @@ if Gitlab::Application.config.action_mailer.delivery_method == :smtp
   ActionMailer::Base.smtp_settings = {
     address: "{{ smtp['server'] }}",
     port: {{ smtp['port'] }},
+{%- if smtp['user']|default(False, boolean=True) %}
     user_name: "{{ smtp['user'] }}",
     password: "{{ smtp['password'] }}",
-    domain: "{{ smtp['domain']|default( smtp['user'].split('@', 1)[1] ) }}",
     authentication: "{{ smtp['authentication']|default('plain') }}",
+{%- endif %}
+    domain: "{{ smtp['domain']|default( smtp['user'].split('@', 1)[1] ) }}",
 {%- if smtp['encryption']|default('plain') == 'starttls' %}
     enable_starttls_auto: true,
 {%- else %}

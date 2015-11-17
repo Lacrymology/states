@@ -3,6 +3,7 @@
 include:
   - diamond
   - nginx.diamond
+  - rsyslog.diamond
 
 youtrack_diamond_resources:
   file:

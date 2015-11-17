@@ -389,7 +389,7 @@ gitlab_shell:
     - directory
     - user: gitlab
     - group: gitlab
-    - mode: 755
+    - mode: 750
     - require:
       - archive: gitlab_shell
 

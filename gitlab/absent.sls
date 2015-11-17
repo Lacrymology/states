@@ -4,6 +4,7 @@
 {{ upstart_absent('gitlab-sidekiq') }}
 {{ upstart_absent('gitlab-git-http-server') }}
 {{ upstart_absent('gitlab-unicorn') }}
+{{ upstart_absent('gitlab-mail-room') }}
 
 gitlab:
   process:
@@ -14,6 +15,7 @@ gitlab:
       - service: gitlab-sidekiq
       - service: gitlab-git-http-server
       - service: gitlab-unicorn
+      - service: gitlab-mail-room
   user:
     - absent
     - force: True

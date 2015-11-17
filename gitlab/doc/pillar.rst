@@ -154,3 +154,27 @@ gitlab:db:password
 ~~~~~~~~~~~~~~~~~~
 
 .. include:: /postgresql/doc/password.inc
+
+gitlab:incoming_email
+~~~~~~~~~~~~~~~~~~~~~
+
+:ref:`glossary-imap` account information to receive incoming emails.
+
+Format::
+
+  gitlab:
+    incoming_email:
+      address: "incoming+%{key}@gitlab.example.com"
+      user: incoming
+      password: secretpass
+      host: "gitlab.example.com"
+      port: 143
+      ssl: false
+      start_tls: false
+
+The email address including the ``%{key}`` placeholder that will be replaced to
+reference the item being replied to. If not specified, it will be guess from
+user. For example, if user is ``gitlab@example.com``, the address will be
+``gitlab+%{key}@example.com``.
+
+Default: don't receive incoming email (``False``).

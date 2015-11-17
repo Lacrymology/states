@@ -1,6 +1,5 @@
-========
- Pillar
-========
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -15,7 +14,7 @@
    See :ref:`pillar-ssh-server-extra_configs`.
 
 Mandatory
-=========
+---------
 
 Example::
 
@@ -29,7 +28,7 @@ Example::
 .. _pillar-gitlab-hostnames:
 
 gitlab:hostnames
-----------------
+~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/hostnames.inc
 
@@ -43,7 +42,7 @@ Example: ``__salt__['network.ip_addrs']('eth0')[0]``
    admin.
 
 gitlab:admin:password
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 Password for :doc:`index` Administrator account.
 
@@ -60,13 +59,13 @@ Example: ``'123456789'``
 .. _pillar-gitlab-db_key_base:
 
 gitlab:db_key_base
-------------------
+~~~~~~~~~~~~~~~~~~
 
 Used to encrypt for variables, required to access variables stored in database,
 use at least 30 random characters.
 
 Optional
-========
+--------
 
 Example::
 
@@ -89,7 +88,7 @@ Example::
 .. _gitlab-admin-email:
 
 gitlab:admin:email
-------------------
+~~~~~~~~~~~~~~~~~~
 
 The email address for the default Administrator account.
 This can be used to login at the first time after installing.
@@ -99,7 +98,7 @@ Default: Use the value of :ref:`pillar-smtp-from` pillar key (``False``).
 .. _pillar-gitlab-commit_timeout:
 
 gitlab:commit_timeout
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 Git timeout to read a commit, in seconds
 
@@ -108,7 +107,7 @@ Default: abort if can't read a commit in ``30`` seconds.
 .. _pillar-gitlab-max_size:
 
 gitlab:max_size
----------------
+~~~~~~~~~~~~~~~
 
 Max size of a :doc:`/git/doc/index` object (e.g. a commit), in bytes.
 This value can be increased if you have very large commits
@@ -119,14 +118,14 @@ Default: max size of a :doc:`/git/doc/index` object is 5 megabytes
 .. _pillar-gitlab-ssl:
 
 gitlab:ssl
-----------
+~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl.inc
 
 .. _pillar-gitlab-ssl_redirect:
 
 gitlab:ssl_redirect
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl_redirect.inc
 
@@ -135,14 +134,14 @@ gitlab:ssl_redirect
 .. _pillar-gitlab-smtp:
 
 gitlab:smtp
------------
+~~~~~~~~~~~
 
 .. include:: /mail/doc/smtp.inc
 
 .. _pillar-gitlab-smtp-from:
 
 gitlab:smtp:from
-----------------
+~~~~~~~~~~~~~~~~
 
 The address that will appear in the "From:" field of the email sent by
 :doc:`index`.
@@ -152,12 +151,12 @@ Default: Use the value of :ref:`pillar-smtp-from` (``False``).
 .. _pillar-gitlab-db-password:
 
 gitlab:db:password
-------------------
+~~~~~~~~~~~~~~~~~~
 
 .. include:: /postgresql/doc/password.inc
 
 gitlab:incoming_email
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 :ref:`glossary-imap` account information to receive incoming emails.
 

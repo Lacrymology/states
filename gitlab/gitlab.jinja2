@@ -33,6 +33,11 @@ production: &base
 
 {%- if incoming_email %}
   incoming_email:
+  {%- if "address" not in incoming_email %}
+    {%- do incoming_email.update({"address": "%s+%%{key}@%s" %
+      (incoming_email["user"].split("@")[0],
+       incoming_email["user"].split("@")[1],)}) %}
+  {%- endif %}
     enabled: true
     address: '{{ incoming_email["address"] }}'
     user: '{{ incoming_email["user"] }}'

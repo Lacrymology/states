@@ -5,3 +5,9 @@
 rsyslogd_procs:
   description: rsyslog Daemon
   command: /usr/lib/nagios/plugins/check_procs -c 1:1 -C rsyslogd -u syslog
+
+rsyslogd_port:
+  description: rsyslog Port
+  command: /usr/lib/nagios/plugins/check_udp_listen 514
+  dependencies:
+    - rsyslogd_procs

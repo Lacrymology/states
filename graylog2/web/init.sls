@@ -106,6 +106,9 @@ graylog-web:
     - user: root
     - group: www-data
     - mode: 440
+    - context:
+        appname: graylog2
+        root: /var/www
     - require:
       - pkg: nginx
     - watch_in:

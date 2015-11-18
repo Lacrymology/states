@@ -55,7 +55,7 @@ piwik:
       - pkg: python-mysqldb
   mysql_user:
     - present
-    - host: localhost
+    - host: 127.0.0.1
     - name: piwik
     - password: {{ db_password }}
     - require:
@@ -66,7 +66,7 @@ piwik:
     - grant: all privileges
     - user: piwik
     - database: piwik.*
-    - host: localhost
+    - host: 127.0.0.1
     - require:
       - mysql_user: piwik
       - mysql_database: piwik

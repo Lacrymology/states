@@ -18,19 +18,20 @@ upstream {{ name }} {
 
 {%- set ssl = salt['pillar.get'](name + ':ssl', False) %}
 {%- set hostnames = salt['pillar.get'](name + ':hostnames') %}
+{%- set ssl_redirect = salt['pillar.get'](name + ':ssl_redirect', False) %}
 
 server {
     listen 80;
     listen [::]:80;
 {% if ssl %}
-{% if salt['pillar.get'](name + ':ssl_redirect', False) %}
+  {% if ssl_redirect %}
     {# if https, redirect http port 80 to https port 443 #}
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ hostnames[0] }}$request_uri;
 }
 {#- https server #}
 server {
-{% endif %}{# redirect http to https #}
+  {% endif %}{# redirect http to https #}
 {%- from 'nginx/macro.jinja2' import ssl_config with context %}
     {{ ssl_config(ssl) }}
 {% endif %}

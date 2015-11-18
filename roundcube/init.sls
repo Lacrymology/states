@@ -170,7 +170,8 @@ roundcube_password_plugin_ldap_driver_dependency:
       - user: web
       - file: roundcube-uwsgi
     - context:
-        dir: {{ roundcubedir }}
+        appname: roundcube
+        root: {{ roundcubedir }}
     - watch_in:
       - service: nginx
 

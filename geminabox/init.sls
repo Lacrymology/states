@@ -123,11 +123,14 @@ geminabox-uwsgi:
 /etc/nginx/conf.d/geminabox.conf:
   file:
     - managed
-    - source: salt://geminabox/nginx.jinja2
+    - source: salt://nginx/template.jinja2
     - template: jinja
     - group: www-data
     - user: www-data
     - mode: 440
+    - context:
+        appname: geminabox
+        uwsgi: 7
     - require:
       - pkg: nginx
       - user: web

@@ -321,6 +321,9 @@ graphite_patch_issue_608_pickle_unsafe:
     - user: root
     - group: www-data
     - mode: 440
+    - context:
+        appname: graphite
+        root: /usr/local/graphite/webapp/
     - require:
       - file: graphite-web-uwsgi
       - pkg: nginx

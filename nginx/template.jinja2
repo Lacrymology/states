@@ -2,6 +2,9 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
+{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
+
 {#- var passed by context #}
 {%- set name = appname %}
 {%- set root_path = root|default(False) %}
@@ -32,7 +35,6 @@ server {
 {#- https server #}
 server {
   {% endif %}{# redirect http to https #}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
     {{ ssl_config(ssl) }}
 {% endif %}
 {#- web app logic #}
@@ -72,7 +74,6 @@ server {
 {%- endblock %}
 
 {%- block robottxt_location %}
-{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
     {{ robots_location() }}
 {%- endblock %}
 

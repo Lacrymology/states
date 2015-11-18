@@ -2,35 +2,15 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set python_version = '%d.%d' % (grains['pythonversion'][0], grains['pythonversion'][1]) %}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
+{% extends "nginx/template.jinja2" %}
+{%- block upstream %}
 upstream sentry {
     server unix:///var/lib/uwsgi/sentry.sock;
 }
+{%- endblock %}
 
-server {
-    listen 80;
-    listen [::]:80;
-{%- set ssl = salt['pillar.get']('sentry:ssl', False) %}
-{% if ssl %}
-{% if salt['pillar.get']('sentry:ssl_redirect', False) %}
-{%- set hostnames = salt['pillar.get']('sentry:hostnames') %}
-    {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ salt['pillar.get']('sentry:hostnames')[0] }}$request_uri;
-}
-
-server {
-{% endif %}{# redirect http to https #}
-    {{ ssl_config(ssl) }}
-{% endif %}
-
-    server_name {% for hostname in salt['pillar.get']('sentry:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-
-    root /usr/local/sentry;
-
-{% include "nginx/block_hacks.jinja2" %}
-
+{%- block root_location %}
     location /_admin_media/ {
         expires 1h;
         autoindex off;
@@ -56,9 +36,6 @@ server {
        return 404;
     }
 
-{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
-    {{ robots_location() }}
-
 {%- set timeout = salt['pillar.get']('sentry:timeout', 60) %}
 
     location / {
@@ -67,4 +44,4 @@ server {
         uwsgi_read_timeout {{ timeout }};
         uwsgi_send_timeout {{ timeout }};
     }
-}
+{%- endblock %}

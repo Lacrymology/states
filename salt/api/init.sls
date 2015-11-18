@@ -83,6 +83,9 @@ salt-api-requirements:
     - user: root
     - group: www-data
     - mode: 440
+    - context:
+        appname: salt_api
+        root: /usr/local/salt-ui
     - require:
       - pkg: nginx
     - watch_in:

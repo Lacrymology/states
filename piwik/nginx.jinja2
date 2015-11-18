@@ -1,39 +1,19 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
-# {{ salt['pillar.get']('message_do_not_modify') }}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{% extends "nginx/template.jinja2" %}
+{%- block upstream %}
 upstream piwik {
     server unix:///var/lib/uwsgi/piwik.sock;
 }
+{%- endblock %}
 
-server {
-    listen 80;
-    listen [::]:80;
-{% if ssl %}
-  {% if ssl_redirect %}
-    {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ hostnames[0] }}$request_uri;
-}
-{# https server #}
-server {
-  {% endif %}{# redirect http to https #}
-    {{ ssl_config(ssl) }}
-{% endif %}
-
-{# web app logic #}
-    server_name {% for hostname in hostnames -%}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    root /usr/share/piwik;
-
-{% include "nginx/block_hacks.jinja2" %}
-
+{%- block root_location %}
     index index.php index.html index.htm;
     location / {
         try_files $uri $uri/ /index.php?$args;
     }
-
-{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
-    {{ robots_location() }}
 
     location ~ \.php$ {
         gzip off;
@@ -41,4 +21,4 @@ server {
         uwsgi_modifier1 14;
         uwsgi_pass piwik;
     }
-}
+{%- endblock %}

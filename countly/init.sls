@@ -288,9 +288,7 @@ countly_dashboard:
     - group: www-data
     - mode: 440
     - context:
-        ssl: {{ ssl }}
-        ssl_redirect: {{ ssl_redirect }}
-        hostnames: {{ hostnames }}
+        appname: countly
     - require:
       - pkg: nginx
       - user: web

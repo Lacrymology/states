@@ -7,7 +7,6 @@
 {%- set version = "0.11.24" %}
 {%- set repo = mirror ~ "/" ~ version %}
 {%- set ssl = salt["pillar.get"]("syncthing:ssl", False) %}
-{%- set ssl_redirect = salt["pillar.get"]("syncthing:ssl_redirect", False) %}
 {%- set hostnames = salt["pillar.get"]("syncthing:hostnames", [])|default(False, boolean=True) %}
 
 include:
@@ -157,9 +156,7 @@ syncthing_shared_directory_{{ path }}:
     - group: www-data
     - mode: 440
     - context:
-        ssl: {{ ssl }}
-        ssl_redirect: {{ ssl_redirect }}
-        hostnames: {{ hostnames }}
+        appname: syncthing
     - require:
       - pkg: nginx
       - service: syncthing

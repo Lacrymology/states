@@ -3,7 +3,6 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 {% extends "nginx/template.jinja2" %}
-
 {%- block upstream %}
 upstream graylog2 {
     server 127.0.0.1:9000;

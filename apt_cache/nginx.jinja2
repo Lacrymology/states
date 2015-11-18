@@ -2,6 +2,7 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
+{% extends "nginx/template.jinja2" %}
 {%- block upstream %}
 upstream apt_cache {
     server localhost:3142;

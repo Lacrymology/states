@@ -2,6 +2,10 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
+{% extends "nginx/template.jinja2" %}
+{%- block upstream %}
+{%- endblock %}
+
 {%- block root_location -%}
     location / {
         try_files $uri $uri/index.html =404;

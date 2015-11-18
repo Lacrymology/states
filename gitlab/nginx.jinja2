@@ -1,8 +1,9 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
-# {{ salt['pillar.get']('message_do_not_modify') }}
-{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{% extends "nginx/template.jinja2" %}
+{%- block upstream %}
 upstream gitlab {
     server unix:///var/run/gitlab/unicorn.sock;
 }
@@ -10,30 +11,11 @@ upstream gitlab {
 upstream gitlab-git-http-server {
   server unix:///var/run/gitlab/gitlab-git-http-server.sock;
 }
+{%- endblock %}
 
-server {
-    listen 80;
-    listen [::]:80;
-{%- set ssl = salt['pillar.get']('gitlab:ssl', False) %}
-{% if ssl %}
-{% if salt['pillar.get']('gitlab:ssl_redirect', False) %}
-{%- set hostnames = salt['pillar.get']('gitlab:hostnames') %}
-    {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ salt['pillar.get']('gitlab:hostnames')[0] }}$request_uri;
-}
-{# https server #}
-server {
-{% endif %}{# redirect http to https #}
-    {{ ssl_config(ssl) }}
-{% endif %}
-{# web app logic #}
-    server_name {% for hostname in  salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    root /home/gitlab/gitlabhq-{{ version }}/public;
+{%- block root_location -%}
     client_max_body_size 20m;
     server_tokens off;
-
-{% include "nginx/block_hacks.jinja2" %}
 
     if ($http_user_agent ~* "Go") {
         return 200 "
@@ -121,6 +103,4 @@ server {
     }
 
     error_page 502 /502.html;
-
-    {{ robots_location() }}
-}
+{%- endblock %}

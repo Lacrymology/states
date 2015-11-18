@@ -401,6 +401,9 @@ gitlab_shell:
     - user: root
     - group: www-data
     - mode: 440
+    - context:
+        appname: gitlab
+        root: /home/gitlab/gitlabhq-{{ version }}/public
     - require:
       - pkg: nginx
       - user: web

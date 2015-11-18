@@ -15,6 +15,7 @@ XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', 64) }}MiB
 
 cd /var/lib/youtrack/teamsysdata-backup
 for file in *.tar.gz; do
+    [ -e "$file" ] || continue
     # youtrack uses %H-%M-%S, not %H_%M_%S like our convention. Convert it
     formalized_fn=youtrack-$(echo $file | cut -f3- -d'_' | cut -f1 -d'.' | sed 's/-/_/4g')
     # we prefer xz

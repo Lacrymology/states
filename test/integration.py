@@ -735,16 +735,17 @@ class States(unittest.TestCase):
                         del output[state][key]
                     except KeyError:
                         pass
-                for key in ('comment', 'name'):
+                for key in ('comment', 'changes'):
                     if key not in output[state]:
                         output[state][key] = \
                             "WARNING: no '%s' in result of '%s'" % (key, state)
-                    logger.warning("Missing key '%s' in output[%s]: %s", key,
-                                   state, output[state])
                 str_errors += os.linesep.join((
-                    output[state]['name'],
-                    '=' * len(output[state]['name']),
-                    output[state]['comment'],
+                    '',
+                    state,
+                    '=' * len(state),
+                    'name: {0}'.format(output[state].get('name', '')),
+                    'comment: {0}'.format(output[state]['comment']),
+                    'changes: {0}'.format(output[state]['changes']),
                     ''
                 ))
 

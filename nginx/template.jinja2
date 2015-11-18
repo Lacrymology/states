@@ -4,7 +4,7 @@
 
 {#- var passed by context #}
 {%- set name = appname %}
-{%- set root_path= root %}
+{%- set root_path = root|default(False) %}
 {%- set static_dirs = statics|default([]) %}
 
 {%- block header %}
@@ -37,7 +37,9 @@ server {
 {% endif %}
 {#- web app logic #}
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+{%- if root_path %}
     root {{ root_path }};
+{%- endif %}
 
 {% include "nginx/block_hacks.jinja2" %}
 

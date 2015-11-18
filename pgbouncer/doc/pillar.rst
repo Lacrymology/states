@@ -62,6 +62,7 @@ Example::
       user1: pass1
     listen_addr:
       - 127.0.0.1
+      - ::1
     listen_port: 6543
     auth_type: trust
     pool_mode: session
@@ -93,7 +94,7 @@ set, only :ref:`glossary-Unix-socket` connections are allowed.
 
 Addresses can be specified numerically (IPv4/IPv6) or by name.
 
-Default: only listen to :ref:`glossary-localhost` (``[127.0.0.1]``).
+Default: only listen to :ref:`glossary-localhost` (``[127.0.0.1, ::1]``).
 
 .. _pillar-pgbouncer-listen_port:
 

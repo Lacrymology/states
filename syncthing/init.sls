@@ -157,6 +157,7 @@ syncthing_shared_directory_{{ path }}:
     - mode: 440
     - context:
         appname: syncthing
+        hostnames: {{ hostnames }}
     - require:
       - pkg: nginx
       - service: syncthing

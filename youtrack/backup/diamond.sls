@@ -5,4 +5,4 @@ include:
   - cron.diamond
 
 {%- from "postgresql/server/backup/diamond.jinja2" import postgresql_backup_diamond with context %}
-{{ postgresql_backup_diamond('djangopypi2') }}
+{{ postgresql_backup_diamond('youtrack') }}

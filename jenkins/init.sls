@@ -112,6 +112,9 @@ jenkins_old_version:
     - user: root
     - group: www-data
     - mode: 440
+    - context:
+        appname: jenkins
+        root: /var/cache/jenkins/war/
     - require:
       - pkg: nginx
       - service: jenkins

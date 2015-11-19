@@ -228,6 +228,9 @@ sentry-migrate-fake:
     - group: www-data
     - mode: 440
     - source: salt://sentry/nginx.jinja2
+    - context:
+        appname: sentry
+        root: /usr/local/sentry
     - require:
       - pkg: nginx
       - file: sentry-uwsgi

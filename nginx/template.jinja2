@@ -2,10 +2,19 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
+{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
+
 {#- var passed by context #}
 {%- set name = appname %}
-{%- set root_path= root %}
+{%- set root_path = root|default(False) %}
 {%- set static_dirs = statics|default([]) %}
+
+{%- set ssl = salt['pillar.get'](name + ':ssl', False) %}
+{%- if hostnames is not defined %}
+  {%- set hostnames = salt['pillar.get'](name + ':hostnames') %}
+{%- endif %}
+{%- set ssl_redirect = salt['pillar.get'](name + ':ssl_redirect', False) %}
 
 {%- block header %}
 {%- endblock %}
@@ -16,27 +25,25 @@ upstream {{ name }} {
 }
 {%- endblock %}
 
-{%- set ssl = salt['pillar.get'](name + ':ssl', False) %}
-{%- set hostnames = salt['pillar.get'](name + ':hostnames') %}
-
 server {
     listen 80;
     listen [::]:80;
 {% if ssl %}
-{% if salt['pillar.get'](name + ':ssl_redirect', False) %}
+  {% if ssl_redirect %}
     {# if https, redirect http port 80 to https port 443 #}
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ hostnames[0] }}$request_uri;
 }
 {#- https server #}
 server {
-{% endif %}{# redirect http to https #}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
+  {% endif %}{# redirect http to https #}
     {{ ssl_config(ssl) }}
 {% endif %}
 {#- web app logic #}
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+{%- if root_path %}
     root {{ root_path }};
+{%- endif %}
 
 {% include "nginx/block_hacks.jinja2" %}
 
@@ -69,7 +76,6 @@ server {
 {%- endblock %}
 
 {%- block robottxt_location %}
-{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
     {{ robots_location() }}
 {%- endblock %}
 

@@ -1,25 +1,12 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
-server {
-    listen 80;
-    listen [::]:80;
-{% if ssl %}
-  {% if ssl_redirect %}
-    {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ hostnames[0] }}$request_uri;
-}
-{# https server #}
-server {
-{% endif %}{# redirect http to https #}
-    {{ ssl_config(ssl) }}
-{% endif %}
-{# web app logic #}
-    server_name {% for hostname in  hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    root /usr/local/salt-common-doc;
+{% extends "nginx/template.jinja2" %}
+{%- block upstream %}
+{%- endblock %}
+
+{%- block root_location -%}
     location / {
         try_files $uri $uri/index.html =404;
         gzip_static on;
@@ -35,7 +22,4 @@ server {
         deny all;
         return 404;
     }
-{% include "nginx/block_hacks.jinja2" %}
-{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
-    {{ robots_location() }}
-}
+{%- endblock %}

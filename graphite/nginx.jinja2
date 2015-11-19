@@ -1,33 +1,15 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
+{% extends "nginx/template.jinja2" %}
+{%- block upstream %}
 upstream graphite {
     server unix:///var/lib/uwsgi/graphite.sock;
 }
+{%- endblock %}
 
-server {
-    listen 80;
-    listen [::]:80;
-{%- set ssl = salt['pillar.get']('graphite:ssl', False) %}
-{% if ssl %}
-{% if salt['pillar.get']('graphite:ssl_redirect', False) %}
-{%- set hostnames = salt['pillar.get']('graphite:hostnames') %}
-    {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ salt['pillar.get']('graphite:hostnames')[0] }}$request_uri;
-}
-{#- https server #}
-server {
-{% endif %}{# redirect http to https #}
-    {{ ssl_config(ssl) }}
-{% endif %}
-{#- web app logic #}
-    server_name {% for hostname in salt['pillar.get']('graphite:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-
-    root /usr/local/graphite/webapp/;
-
+{%- block root_location %}
     location /favicon.ico {
         deny all;
         return 404;
@@ -38,8 +20,6 @@ server {
         deny all;
         return 404;
     }
-
-{% include "nginx/block_hacks.jinja2" %}
 
 {%- if salt['pillar.get']('graphite:render_allows', []) %}
     location /render/ {
@@ -63,9 +43,6 @@ server {
         autoindex off;
     }
 
-{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
-    {{ robots_location() }}
-
     location / {
 {%- set timeout = salt['pillar.get']('graphite:timeout', 60) %}
         uwsgi_pass graphite;
@@ -73,4 +50,4 @@ server {
         uwsgi_read_timeout {{ salt['pillar.get']('graphite:timeout', 60) }};
         uwsgi_send_timeout {{ salt['pillar.get']('graphite:timeout', 60) }};
     }
-}
+{%- endblock %}

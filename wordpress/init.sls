@@ -190,7 +190,8 @@ wordpress_initial:
     - watch_in:
       - service: nginx
     - context:
-      dir: {{ wordpressdir }}
+        appname: wordpress
+        root: {{ wordpressdir }}
 
 /etc/logrotate.d/wordpress:
   file:

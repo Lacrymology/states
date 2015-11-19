@@ -208,6 +208,8 @@ etherpad:
     - user: root
     - group: www-data
     - mode: 440
+    - context:
+        appname: etherpad
     - require:
       - pkg: nginx
       - service: etherpad

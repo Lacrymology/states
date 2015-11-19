@@ -403,6 +403,10 @@ gitlab_shell:
     - user: root
     - group: www-data
     - mode: 440
+    - context:
+        appname: gitlab
+        root: /home/gitlab/gitlabhq-{{ version }}/public
+        version: {{ version }}
     - require:
       - pkg: nginx
       - user: web
@@ -411,8 +415,6 @@ gitlab_shell:
 {%- endif %}
     - watch_in:
       - service: nginx
-    - context:
-        version: {{ version }}
 
 gitlab_precompile_assets:
   cmd:

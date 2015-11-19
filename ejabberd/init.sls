@@ -157,11 +157,14 @@ ejabberd_reg_monitor_user:
     - user: root
     - group: www-data
     - mode: 440
+    - context:
+        appname: ejabberd
     - watch_in:
       - service: nginx
     - require:
       - pkg: nginx
       - service: ejabberd
+
 
 {%- if ssl %}
 extend:

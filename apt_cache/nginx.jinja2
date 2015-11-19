@@ -1,33 +1,15 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- set ssl = salt['pillar.get']('apt_cache:ssl', False) -%}
-{%- set hostnames = salt['pillar.get']('apt_cache:hostnames') %}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
-
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
+{% extends "nginx/template.jinja2" %}
+{%- block upstream %}
 upstream apt_cache {
     server localhost:3142;
 }
+{%- endblock %}
 
-server {
-    listen 80;
-    listen [::]:80;
-{%- if ssl %}
-{%- if salt['pillar.get']('apt_cache:ssl_redirect', False) %}
-    {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ hostnames[0] }}$request_uri;
-}
-{# https server #}
-server {
-{% endif %}{# redirect http to https #}
-    {{ ssl_config(ssl) }}
-{%- endif %}
-    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-
-{% include "nginx/block_hacks.jinja2" %}
-
+{%- block root_location -%}
     location / {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -37,11 +19,8 @@ server {
         proxy_pass http://apt_cache;
     }
 
-{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
-    {{ robots_location() }}
-
     location /favicon.ico {
         deny all;
         return 404;
     }
-}
+{%- endblock %}

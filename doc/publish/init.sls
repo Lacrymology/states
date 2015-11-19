@@ -1,9 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- set ssl = salt['pillar.get']('doc:ssl', False) %}
-{%- set ssl_redirect = salt['pillar.get']('doc:ssl_redirect', False) %}
 {%- set is_test = salt['pillar.get']('__test__', False) %}
-{%- set hostnames = salt['pillar.get']('doc:hostnames') %}
 {%- set source = salt["pillar.get"]("doc:source") %}
 {%- set rev = salt['pillar.get']('doc:branch', 'develop') %}
 include:
@@ -108,9 +106,8 @@ doc-publish:
     - watch_in:
       - service: nginx
     - context:
-        hostnames: {{ hostnames }}
-        ssl: {{ ssl }}
-        ssl_redirect: {{ ssl_redirect }}
+        appname: doc
+        root: /usr/local/salt-common-doc
 
 {%- if ssl %}
 extend:

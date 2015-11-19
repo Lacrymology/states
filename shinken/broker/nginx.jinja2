@@ -3,8 +3,9 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 {%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
+{% extends "nginx/template.jinja2" %}
+{%- block upstream %}
 upstream shinken-backend {
     ip_hash;
 {%- set broker = salt['pillar.get']('shinken:architecture:broker') %}
@@ -18,31 +19,9 @@ upstream shinken-backend {
   {%- endfor -%}
 {%- endif %}
 }
+{%- endblock %}
 
-server {
-    listen 80;
-    listen [::]:80;
-{%- set ssl = salt['pillar.get']('shinken:ssl', False) -%}
-{%- if ssl -%}
-  {%- if salt['pillar.get']('shinken:ssl_redirect', False) %}
-{%- set hostnames = salt['pillar.get']('shinken:hostnames') %}
-    {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ salt['pillar.get']('shinken:hostnames')[0] }}$request_uri;
-}
-{#- https server #}
-server {
-  {%- endif %}{# redirect http to https -#}
-    {{ ssl_config(ssl) }}
-{%- endif -%}
-{#- web app logic #}
-    server_name {% for hostname in salt['pillar.get']('shinken:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-
-{% include "nginx/block_hacks.jinja2" %}
-
-{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
-    {{ robots_location() }}
-
+{%- block root_location %}
     location / {
         proxy_pass http://shinken-backend;
         proxy_set_header X-Real-IP $remote_addr;
@@ -55,4 +34,4 @@ server {
     location @webui {
         root /var/lib/shinken/modules/webui/;
     }
-}
+{%- endblock %}

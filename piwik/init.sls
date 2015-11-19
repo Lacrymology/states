@@ -152,9 +152,8 @@ piwik_uwsgi:
     - group: www-data
     - mode: 440
     - context:
-        hostnames: {{ hostnames }}
-        ssl: {{ ssl }}
-        ssl_redirect: {{ salt['pillar.get']('piwik:ssl_redirect', False) }}
+        appname: piwik
+        root: /usr/share/piwik
     - require:
       - pkg: nginx
       - pkg: piwik

@@ -1,24 +1,12 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst #}
+
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
-server {
-    listen 80;
-    listen [::]:80;
-{% if ssl %}
-  {% if ssl_redirect %}
-    {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ hostnames[0] }}$request_uri;
-}
-{# https server #}
-server {
-{% endif %}{# redirect http to https #}
-    {{ ssl_config(ssl) }}
-{% endif %}
+{% extends "nginx/template.jinja2" %}
+{% block upstream %}
+{%- endblock %}
 
-server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-
+{% block root_location %}
     location = /i {
         proxy_pass http://127.0.0.1:3001;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -45,4 +33,4 @@ server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} 
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Real-IP $remote_addr;
     }
-}
+{%- endblock %}

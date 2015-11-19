@@ -19,6 +19,8 @@ include:
     - user: root
     - group: www-data
     - mode: 440
+    - context:
+        appname: shinken
     - require:
       - pkg: nginx
       - user: web

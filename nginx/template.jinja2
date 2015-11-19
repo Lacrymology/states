@@ -11,7 +11,9 @@
 {%- set static_dirs = statics|default([]) %}
 
 {%- set ssl = salt['pillar.get'](name + ':ssl', False) %}
-{%- set hostnames = salt['pillar.get'](name + ':hostnames') %}
+{%- if hostnames is not defined %}
+  {%- set hostnames = salt['pillar.get'](name + ':hostnames') %}
+{%- endif %}
 {%- set ssl_redirect = salt['pillar.get'](name + ':ssl_redirect', False) %}
 
 {%- block header %}

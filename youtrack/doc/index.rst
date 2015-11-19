@@ -35,3 +35,14 @@ Content
     :glob:
 
     *
+
+Usage
+-----
+
+Backup
+------
+
+If :doc:`index`.backup is used, administrator must also configure backup
+from Administration Menu of :doc:`index`.
+See https://confluence.jetbrains.com/display/YTD65/Backing+Up+Database
+for more details.

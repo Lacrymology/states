@@ -158,9 +158,11 @@ gitlabhq-{{ version }}:
     - name: /home/gitlab/gitlabhq-{{ version }}
     - user: gitlab
     - group: gitlab
+{%- if not salt["file.directory_exists"]("/home/gitlab/gitlabhq-%s" % version) %}
     - recurse:
       - user
       - group
+{%- endif %}
     - require:
       - archive: gitlab
 

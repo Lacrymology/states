@@ -244,6 +244,9 @@ openerp-uwsgi:
     - user: root
     - group: www-data
     - mode: 440
+    - context:
+        appname: openerp
+        root: {{ web_root_dir }}/openerp
     - require:
       - pkg: nginx
       - file: openerp-uwsgi
@@ -252,8 +255,6 @@ openerp-uwsgi:
 {%- endif %}
     - watch_in:
       - service: nginx
-    - context:
-        web_root_dir: {{ web_root_dir }}
 
 extend:
 {% if ssl %}

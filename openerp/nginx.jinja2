@@ -1,47 +1,22 @@
-{#-
-Use of this is governed by a license that can be found in doc/license.rst.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
+{% extends "nginx/template.jinja2" %}
+{%- block upstream %}
 upstream openerp {
     server unix:///var/lib/uwsgi/openerp.sock;
 }
-server {
-    listen 80;
-    listen [::]:80;
+{%- endblock %}
 
+{%- block root_location -%}
     client_max_body_size {{ salt['pillar.get']('openerp:max_upload_file_size', 1) }}m;
-{%- set ssl = salt['pillar.get']('openerp:ssl', False) %}
-    {%- if ssl %}
-    {%- if salt['pillar.get']('openerp:ssl_redirect', False) %}
-    {# if https, redirect http port 80 to https port 443 #}
-{%- set hostnames = salt['pillar.get']('openerp:hostnames') %}
-
-    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ salt['pillar.get']('openerp:hostnames')[0] }}$request_uri;
-}
-server {
-{%- endif %}{# redirect http to https #}
-    {{ ssl_config(ssl) }}
-{%- endif %}
-
-    server_name {% for hostname in salt['pillar.get']('openerp:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-
-    root {{ web_root_dir }}/openerp;
-
-{% include "nginx/block_hacks.jinja2" %}
-
-{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
-    {{ robots_location() }}
 
 {%- set timeout = salt['pillar.get']('openerp:timeout', 60) %}
-
     location / {
         uwsgi_pass openerp;
         include uwsgi_params;
         uwsgi_read_timeout {{ timeout }};
         uwsgi_send_timeout {{ timeout }};
     }
-}
+{%- endblock %}

@@ -53,6 +53,7 @@ check_psql_encoding.py:
       - pkg: nagios-nrpe-server
       - file: nsca-postgresql.common
       - module: nrpe-virtualenv
+      - file: /etc/sudoers.d/nrpe_postgresql_common
 
 /etc/sudoers.d/nrpe_postgresql_common:
   file:

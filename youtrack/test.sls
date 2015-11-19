@@ -50,7 +50,7 @@ test:
     - name: youtrack
     - doc: {{ opts['cachedir'] }}/doc/output
     - additional:
-      - openldap.backup
+      - youtrack.backup
     - require:
       - monitoring: test
       - cmd: doc

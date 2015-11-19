@@ -82,6 +82,8 @@ apt_cache:
     - user: root
     - group: www-data
     - mode: 440
+    - context:
+        appname: apt_cache
     - require:
       - pkg: nginx
       - service: apt_cache

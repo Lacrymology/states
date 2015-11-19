@@ -82,3 +82,7 @@ nagios-nrpe-server:
 {{ opts['cachedir'] }}/pip/nrpe:
   file:
     - absent
+
+/etc/cron.hourly/nrpe-killer:
+  file:
+    - absent

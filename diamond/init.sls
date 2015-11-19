@@ -60,7 +60,6 @@ diamond.conf:
 diamond:
   virtualenv:
     - manage
-    - upgrade: True
     - name: /usr/local/diamond
     - require:
       - module: virtualenv

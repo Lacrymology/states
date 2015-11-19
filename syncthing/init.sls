@@ -7,7 +7,7 @@
 {%- set version = "0.11.24" %}
 {%- set repo = mirror ~ "/" ~ version %}
 {%- set ssl = salt["pillar.get"]("syncthing:ssl", False) %}
-{%- set hostnames = salt["pillar.get"]("syncthing:hostnames", [])|default(False, boolean=True) %}
+{%- set hostnames = salt["pillar.get"]("syncthing:hostnames", []) %}
 
 include:
   - apt

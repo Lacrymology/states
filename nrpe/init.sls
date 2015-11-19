@@ -352,6 +352,19 @@ nsca_passive:
       - service: rsyslog
 {% endif %}
 
+/etc/cron.hourly/nrpe-killer:
+  file:
+    - managed
+    - source: salt://nrpe/cron_hourly.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 500
+    - require:
+      - file: bash
+      - pkg: cron
+      - pkg: nagios-nrpe-server
+
 extend:
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}
 {{ change_ssh_key_owner('nagios', {'pkg': 'nagios-nrpe-server'}) }}

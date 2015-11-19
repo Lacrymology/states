@@ -1,6 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- from "os.jinja2" import os with context %}
+{%- from "nrpe/passive.jinja2" import passive_interval with context -%}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
@@ -52,6 +53,7 @@ nrpe_procs:
 
 nrpe_hang_check_procs:
   description: NRPE Check Processes which took too long
+  {{ passive_interval(2 * 60) }}
   command: '/usr/lib/nagios/plugins/check_procs -m ELAPSED -c :1800 -s S -C nrpe -p 1 -u nagios'
 
 logged_users:

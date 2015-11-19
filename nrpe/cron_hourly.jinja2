@@ -1,0 +1,33 @@
+#!/bin/bash
+# {{ salt['pillar.get']('message_do_not_modify') }}
+# Usage of this is governed by a license that can be found in doc/license.rst
+# periodically kill hang nagios-nrpe-server processes
+
+{%- raw %} {# bash array syntax conflicts with jinja #}
+set -e
+
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+locking_script
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
+readonly elap_sec='1800'       # time in seconds until a process is
+                               # considers hang
+
+procs=($(/usr/lib/nagios/plugins/check_procs \
+            -m ELAPSED -c :"$elap_sec" -s S -C nrpe -p 1 -u nagios -vv | \
+                awk '/^Matched/{sub(/pid=/, "", $5); print $5}'))
+
+if [[ ${#procs[@]} -eq 0 ]]; then
+    echo "No hang nagios-nrpe-server process detected" | \
+        logger -t nrpe-killer -p local0.info
+    exit 0
+fi
+
+for proc in "${procs[@]}"; do
+    echo "Killing hang nrpe process: $proc" | \
+        logger -t nrpe-killer -p local0.info
+    kill "$proc"
+done
+{%- endraw %}

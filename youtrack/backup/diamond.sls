@@ -4,5 +4,8 @@ include:
   - backup.diamond
   - cron.diamond
 
-{%- from "postgresql/server/backup/diamond.jinja2" import postgresql_backup_diamond with context %}
-{{ postgresql_backup_diamond('youtrack') }}
+{#- salt can't require sls with no state #}
+youtrack_backup_diamond:
+  cmd:
+    - wait
+    - name: /bin/echo 'this state does nothing'

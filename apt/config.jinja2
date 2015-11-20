@@ -6,7 +6,9 @@ APT::Periodic::AutocleanInterval "1";
 APT::Periodic::RandomSleep "0";
 APT::Install-Recommends "0";
 APT::Clean-Installed "true";
+{%- if not salt['pillar.get']('__test__', False) %}
 APT::Periodic::MaxSize "300";
+{%- endif %}
 {%- set proxy_server = salt['pillar.get']('apt:proxy_server', False) %}
 {%- if proxy_server %}
 Acquire::http::Proxy "http://{{ proxy_server }}";

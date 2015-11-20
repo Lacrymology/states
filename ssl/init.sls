@@ -45,6 +45,7 @@ ssl_dhparam:
   file:
     - managed
     - name: /etc/ssl/dhparam.pem
+    - replace: False
     - user: root
     - group: ssl-cert
     - mode: 440

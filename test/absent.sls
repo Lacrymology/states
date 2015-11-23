@@ -44,8 +44,6 @@
   "mongodb",
   "nginx",
   "ntp",
-  "openerp",
-  "openerp.backup",
   "openldap",
   "openldap.backup",
   "openvpn.server",

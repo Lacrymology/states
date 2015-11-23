@@ -13,7 +13,7 @@
     timeout: 15 {#- 15 seconds to run statement  #}
     passwd: {{ password }}
     user: {{ username }}
-    host: localhost
+    host: 127.0.0.1
     database: {{ dbname }}
   dependencies:
     - mysql_port
@@ -26,7 +26,7 @@
     timeout: 15 {#- 15 seconds to run statement  #}
     passwd: {{ password }}
     user: {{ username }}
-    host: localhost
+    host: 127.0.0.1
     database: {{ dbname }}
     query: "select * from information_schema.tables where table_schema = '{{ dbname }}';"
     critical: "1:"

@@ -70,5 +70,7 @@ reactor:
     - /srv/reactor/reaction/*.sls
 {%- endif %}
 
+{%- if salt['monitoring.data']()['ip_addrs6']['public'] %}
 ipv6: True
 interface: '::'
+{%- endif %}

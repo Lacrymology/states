@@ -16,6 +16,13 @@ pgbouncer_port:
   dependencies:
     - pgbouncer_procs
 
+pgbouncer_port_ipv6:
+  description: PgBouncer Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p {{ port }} -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - pgbouncer_procs
+
 pgbouncer_special_virtual_db:
   description: PgBouncer Special Virtual Database
   command: sudo -u postgres /usr/lib/nagios/plugins/check_pgsql -P {{ port }} -d pgbouncer -l pgbouncer

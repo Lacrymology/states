@@ -15,6 +15,15 @@ proftpd_port:
   dependencies:
     - proftpd_procs
 
+{%- if salt['monitoring.data']()['ip_addrs6']['public'] %}
+proftpd_port_ipv6:
+  description: ProFTPD Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 21 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - proftpd_procs
+{%- endif %}
+
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
 {{ postgresql_instance_prefix('proftpd') }}
 

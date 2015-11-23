@@ -117,7 +117,6 @@
   "shinken-receiver",
   "shinken-scheduler",
   "squid3",
-  "openerp",
   "openssh-server",
   "statsd",
   "terracotta",
@@ -203,7 +202,6 @@ include:
   - nginx.absent
   - nrpe.absent
   - ntp.absent
-  - openerp.absent
   - openldap.absent
   - pgbouncer.absent
   - postfix.diamond.absent
@@ -267,7 +265,6 @@ extend:
         - service: pgbouncer
         - service: proftpd
         - service: uwsgi
-        - service: openerp
   mongodb:
     service:
       - require:

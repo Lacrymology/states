@@ -19,12 +19,6 @@ salt_master_publish_port
 
 :doc:`/salt/master/doc/index` Publish port can be accessed locally.
 
-salt_master_publish_port_ipv6
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-:doc:`/salt/master/doc/index` Publish port can be accessed locally using
-:ref:`glossary-IPv6` address.
-
 .. _monitor-salt_master_publish_port_remote:
 
 salt_master_publish_port_remote
@@ -38,12 +32,6 @@ salt_master_return_port
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`/salt/master/doc/index` Return port can be accessed locally.
-
-salt_master_return_port_ipv6
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-:doc:`/salt/master/doc/index` Return port can be accessed locally using
-:ref:`glossary-IPv6` address.
 
 .. _monitor-salt_master_return_port_remote:
 
@@ -89,3 +77,19 @@ If this failed, it probably because of missing data of an installed
 :doc:`/salt/minion/doc/index`
 or the mine data existed for a minion which no more managed by
 :doc:`/salt/master/doc/index`.
+
+.. _monitor-salt_master_publish_port_ipv6:
+
+salt_master_publish_port_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`/salt/master/doc/index` Publish port can be accessed locally using
+:ref:`glossary-IPv6` address.
+
+.. _monitor-salt_master_return_port_ipv6:
+
+salt_master_return_port_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`/salt/master/doc/index` Return port can be accessed locally using
+:ref:`glossary-IPv6` address.

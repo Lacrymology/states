@@ -35,13 +35,6 @@ salt_master_publish_port:
   dependencies:
     - salt_master_procs
 
-salt_master_publish_port_ipv6:
-  description: Salt Master Local Port Publish with IPv6
-  command: /usr/lib/nagios/plugins/check_tcp -6 -H ::1 -p 4505 -t {{ timeout }}
-  timeout: {{ timeout }}
-  dependencies:
-    - salt_master_procs
-
 salt_master_publish_port_remote:
   description: Salt Master Remote Port Publish
   check: check_tcp!4505
@@ -56,13 +49,6 @@ salt_master_return_port:
   dependencies:
     - salt_master_procs
 
-salt_master_return_port_ipv6:
-  description: Salt Master Local Port Return
-  command: /usr/lib/nagios/plugins/check_tcp -6 -H ::1 -p 4506 -t {{ timeout }}
-  timeout: {{ timeout }}
-  dependencies:
-    - salt_master_procs
-
 salt_master_return_port_remote:
   description: Salt Master Remote Port Return
   check: check_tcp!4506
@@ -70,6 +56,22 @@ salt_master_return_port_remote:
   passive: False
   dependencies:
     - salt_master_return_port
+
+{%- if salt['monitoring.data']()['ip_addrs6']['public'] %}
+salt_master_publish_port_ipv6:
+  description: Salt Master Local Port Publish with IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -6 -H ::1 -p 4505 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - salt_master_procs
+
+salt_master_return_port_ipv6:
+  description: Salt Master Local Port Return
+  command: /usr/lib/nagios/plugins/check_tcp -6 -H ::1 -p 4506 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - salt_master_procs
+{%- endif %}
 
 salt_master_git_branch:
   description: Check if git repositories in salt-master contains bad characters (/)

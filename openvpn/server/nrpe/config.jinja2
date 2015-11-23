@@ -27,6 +27,7 @@ openvpn_server_{{ instance }}_port_ipv6:
   command: "/usr/lib/nagios/plugins/check_tcp -H ::1 -p {{ port }}"
   dependencies:
     - openvpn_server_{{ instance }}
+  {%- endif %}
 {%- endfor %}
 
 openvpn_server_procs:

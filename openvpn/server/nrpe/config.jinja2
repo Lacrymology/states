@@ -9,14 +9,22 @@ openvpn_server_{{ instance }}:
   description: OpenVPN Instance {{ instance }}
   command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}/config'"
 
-openvpn_server_{{ instance }}_port:
   {%- set port = servers[instance]['port'] | default(1194) %}
+  {%- set protocol = servers[instance]['protocol'] | default('udp') %}
+openvpn_server_{{ instance }}_port:
   description: OpenVPN Instance {{ instance }} Port
-    {%- if (servers[instance]['protocol']|default('udp')).startswith('udp') %}
+    {%- if protocol.startswith('udp') %}
   command: "/usr/lib/nagios/plugins/check_udp_listen {{ port }}"
     {%- else %}
   command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ port }}"
     {%- endif %}
+  dependencies:
+    - openvpn_server_{{ instance }}
+
+  {%- if salt['monitoring.data']()['ip_addrs6']['public'] and protocol.startswith('tcp') %}
+openvpn_server_{{ instance }}_port_ipv6:
+  description: OpenVPN Instance {{ instance }} Port IPv6
+  command: "/usr/lib/nagios/plugins/check_tcp -H ::1 -p {{ port }}"
   dependencies:
     - openvpn_server_{{ instance }}
 {%- endfor %}

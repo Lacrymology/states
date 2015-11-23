@@ -11,7 +11,11 @@ LoadModule mod_sql.c
 LoadModule mod_sql_postgres.c
 
 ServerName "{{ grains['id'] }}"
+{%- if salt['monitoring.data']()['ip_addrs6']['public'] %}
+UseIPv6 on
+{%- else %}
 UseIPv6 off
+{%- endif %}
 IdentLookups off
 ServerType standalone
 DeferWelcome off

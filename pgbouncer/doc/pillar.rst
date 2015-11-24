@@ -94,7 +94,7 @@ set, only :ref:`glossary-Unix-socket` connections are allowed.
 
 Addresses can be specified numerically (IPv4/IPv6) or by name.
 
-Default: only listen to :ref:`glossary-localhost` (``[127.0.0.1, ::1]``).
+Default: only listen to :ref:`glossary-localhost` (``['127.0.0.1', '::1']``).
 
 .. _pillar-pgbouncer-listen_port:
 

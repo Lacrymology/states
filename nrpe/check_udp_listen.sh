@@ -34,7 +34,7 @@ fi
 port="$1"
 
 # get list of listening UDP ports
-listen_ports=($(ss -nlu | awk 'NR > 2 {sub(/^.*:/, "", $4); print $4}'))
+listen_ports=($(ss -nlu | awk 'NR >= 2 {sub(/^.*:/, "", $4); print $4}'))
 
 found=0  # not found
 for listen_port in "${listen_ports[@]}"; do

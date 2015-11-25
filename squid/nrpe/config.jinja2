@@ -18,3 +18,10 @@ squid_proxy_port:
   timeout: {{ timeout }}
   dependencies:
     - squid_procs
+
+squid_proxy_port_ipv6:
+  description: Squid Proxy Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 3128 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - squid_procs

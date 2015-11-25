@@ -4,6 +4,8 @@ Monitor
 Mandatory
 ---------
 
+.. _monitor-tomcat_procs:
+
 tomcat_procs
 ~~~~~~~~~~~~
 
@@ -12,15 +14,21 @@ for :doc:`/java/doc/index` application.
 
 .. include:: /nrpe/doc/check_procs.inc
 
+.. _monitor-tomcat_port_remote:
+
 tomcat_port_remote
 ~~~~~~~~~~~~~~~~~~
 
 :doc:`index` :ref:`glossary-HTTP` Port is reachable from outside.
 
+.. _monitor-tomcat_port:
+
 tomcat_port
 ~~~~~~~~~~~
 
 :doc:`index` :ref:`glossary-HTTP` Port can be connected locally.
+
+.. _monitor-tomcat_command_port:
 
 tomcat_command_port
 ~~~~~~~~~~~~~~~~~~~
@@ -33,3 +41,13 @@ for more detail.
 .. warning::
 
   This port should listen only on :ref:`glossary-localhost`.
+
+Optional
+--------
+
+.. _monitor-tomcat_port_ipv6:
+
+tomcat_port_ipv6
+~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-tomcat_port` but for :ref:`glossary-IPv6`.

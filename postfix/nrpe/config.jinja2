@@ -23,6 +23,16 @@ postfix_port_smtp:
   dependencies:
     - postfix_master
 
+{%- set ipv6 = salt['monitoring.data']()['ip_addrs6']['public'] %}
+{%- if ipv6 %}
+postfix_port_smtp_ipv6:
+  description: Postfix SMTP Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 25 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - postfix_master
+{%- endif %}
+
 {%- set queue_length = salt['pillar.get']('postfix:queue_length', 20) %}
 {%- set queue_length_120_percent = queue_length + (queue_length * 20 / 100)|int %}
 postfix_queue_length:
@@ -47,4 +57,13 @@ postfix_port_smtps:
   timeout: {{ timeout }}
   dependencies:
     - postfix_master
+
+  {%- if ipv6 %}
+postfix_port_smtps_ipv6:
+  description: SMTP over SSL Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 465 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - postfix_master
+  {%- endif %}
 {%- endif %}

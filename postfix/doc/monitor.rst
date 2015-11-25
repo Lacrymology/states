@@ -50,6 +50,13 @@ postfix_port_smtp
 
 :doc:`index` :ref:`glossary-smtp` Port is listening locally.
 
+.. _monitor-postfix_port_smtp_ipv6:
+
+postfix_port_smtp_ipv6
+~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-postfix_port_smtp` but for :ref:`glossary-IPv6`.
+
 postfix_queue_length
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -79,5 +86,12 @@ postfix_port_smtps
 
 :doc:`index` :ref:`glossary-smtp` port over :doc:`/ssl/doc/index` is listening
 locally.
+
+.. _monitor-postfix_port_smtps_ipv6:
+
+postfix_port_smtps_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-postfix_port_smtps` but for :ref:`glossary-IPv6`.
 
 Only check if :ref:`pillar-postfix-ssl` is turned on.

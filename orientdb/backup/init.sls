@@ -1,4 +1,5 @@
 include:
+  - apt
   - bash
   - backup.client.{{ salt['pillar.get']('backup_storage') }}
   - cron
@@ -15,6 +16,12 @@ include:
     - require_in:
       - service: orientdb
 
+lsof:
+  pkg:
+    - installed
+    - require:
+      - cmd: apt_sources
+
 backup-orientdb:
   file:
     - managed
@@ -26,6 +33,7 @@ backup-orientdb:
     - source: salt://orientdb/backup/cron.jinja2
     - require:
       - pkg: cron
+      - pkg: lsof
       - file: /usr/local/bin/backup-store
       - file: bash
       - file: /var/backups/orientdb

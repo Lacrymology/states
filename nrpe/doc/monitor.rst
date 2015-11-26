@@ -79,6 +79,13 @@ loopback_interface
 
 Check if the loopback interface is up.
 
+.. _monitor-loopback_interface_ipv6:
+
+loopback_interface_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-loopback_interface` but for :ref:`glossary-IPv6`.
+
 .. _monitor-oom_messages:
 
 oom_messages

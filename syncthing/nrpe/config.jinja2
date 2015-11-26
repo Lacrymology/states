@@ -12,6 +12,10 @@ syncthing_procs:
   description: Syncthing Procs
   command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u syncthing -C syncthing
 
+syncthing_port:
+  description: Syncthing Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8384
+
 {#- this file can't be empty #}
 syncthing_dummy:
   description: Please ignore this check

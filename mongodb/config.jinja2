@@ -14,7 +14,12 @@ logpath=/var/log/mongodb/mongodb.log
 
 logappend=true
 
-bind_ip = 127.0.0.1
+ipv6 = true
+{#-
+There MUST NOT be a space after the comma. If not:
+  Thu Nov 26 06:37:38.844 [websvr] getaddrinfo(" ::1") failed: Name or service not known
+#}
+bind_ip = 127.0.0.1,::1
 {#- port = 27017 #}
 
 {#-

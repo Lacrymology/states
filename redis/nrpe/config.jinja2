@@ -16,6 +16,13 @@ redis_port:
   dependencies:
     - redis_procs
 
+redis_port_ipv6:
+  description: Redis Local Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 6379 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - redis_procs
+
 redis_remote_port:
   check: check_tcp!6379
   description: Redis Remote Port

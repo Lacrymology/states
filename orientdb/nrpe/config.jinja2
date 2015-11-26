@@ -12,6 +12,13 @@ orientdb_http:
   dependencies:
     - orientdb_procs
 
+orientdb_http_ipv6:
+  description: OrientDB HTTP IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 2480 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - orientdb_procs
+
 orientdb_api:
   description: OrientDB API
   command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -u / -p 2480 -e '200 OK' -t {{ timeout }}
@@ -19,9 +26,23 @@ orientdb_api:
   dependencies:
     - orientdb_http
 
+orientdb_api_ipv6:
+  description: OrientDB API IPv6
+  command: /usr/lib/nagios/plugins/check_http -I ::1 -u / -p 2480 -e '200 OK' -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - orientdb_http_ipv6
+
 orientdb_port:
   description: OrientDB Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2424 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - orientdb_procs
+
+orientdb_port_ipv6:
+  description: OrientDB Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 2424 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - orientdb_procs

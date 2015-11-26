@@ -13,10 +13,24 @@ ejabberd_c2s_port:
   dependencies:
     - ejabberd_proc
 
+ejabberd_c2s_port_ipv6:
+  description: ejabberd XMPP Port (C2S) IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 5222 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - ejabberd_proc
+
 {%- if salt['pillar.get']('ejabberd:server_to_server', False) %}
 ejabberd_s2s_port:
   description: ejabberd Server-to-Server(S2S) Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5269 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - ejabberd_proc
+
+ejabberd_s2s_port_ipv6:
+  description: ejabberd Server-to-Server(S2S) Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 5269 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - ejabberd_proc
@@ -29,9 +43,23 @@ ejabberd_admin_port:
   dependencies:
     - ejabberd_proc
 
+ejabberd_admin_port_ipv6:
+  description: ejabberd admin Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 5280 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - ejabberd_proc
+
 ejabberd_admin_http:
   description: ejabberd admin HTTP
   command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -p 5280 -u /admin -e '401 Unauthorized' -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - ejabberd_admin_port
+
+ejabberd_admin_http_ipv6:
+  description: ejabberd admin HTTP IPv6
+  command: /usr/lib/nagios/plugins/check_http -H ::1 -p 5280 -u /admin -e '401 Unauthorized' -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - ejabberd_admin_port

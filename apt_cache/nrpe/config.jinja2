@@ -8,11 +8,18 @@ apt_cache_procs:
   description: Apt Cache Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C apt-cacher-ng -u apt-cacher-ng'
 
+{%- set timeout = 30 %}
 apt_cache_port:
-  {%- set timeout = 30 %}
   description: Apt Cache TCP Port
   timeout: {{ timeout }}
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 3142 -t {{ timeout }}
+  dependencies:
+    - apt_cache_procs
+
+apt_cache_port_ipv6:
+  description: Apt Cache TCP Port IPv6
+  timeout: {{ timeout }}
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 3142 -t {{ timeout }}
   dependencies:
     - apt_cache_procs
 

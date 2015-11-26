@@ -6,7 +6,7 @@ NAME=jenkins
 
 JAVA=/usr/bin/java
 
-JAVA_ARGS="-Djava.io.tmpdir=/var/lib/jenkins/tmp -Djava.net.preferIPv4Stack=true -Djava.awt.headless=true"
+JAVA_ARGS="-Djava.io.tmpdir=/var/lib/jenkins/tmp {% if not salt['monitoring.data']()['ip_addrs6']['public'] %}-Djava.net.preferIPv4Stack=true {% endif %}-Djava.awt.headless=true"
 
 PIDFILE=/var/run/jenkins/jenkins.pid
 

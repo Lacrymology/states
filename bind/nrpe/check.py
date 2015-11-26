@@ -67,7 +67,7 @@ def main(config):
 
 if __name__ == '__main__':
     nrpe.check(main, {
-        'server': '127.0.0.1',
+        'server': 'localhost',
         'domain': 'robotinfra.com',
         'record': 'a',
         'warning': '3',

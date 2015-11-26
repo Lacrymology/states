@@ -28,3 +28,11 @@ squid_proxy_port
 ~~~~~~~~~~~~~~~~
 
 Monitor :doc:`index` port :ref:`glossary-TCP` ``3128``.
+
+.. _monitor-squid_proxy_port_ipv6:
+
+squid_proxy_port_ipv6
+~~~~~~~~~~~~~~~~~~~~~
+
+Monitor :doc:`index` port :ref:`glossary-TCP` ``3128`` using
+:ref:`glossary-IPv6`.

@@ -66,7 +66,7 @@ addresses. If the list is empty, the server does not listen on any IP interface
 at all, in which case only Unix-domain sockets can be used to connect to it.
 
 Default: allows only local :ref:`glossary-TCP`/IP "loopback" connections to be
-made (``localhost``).
+made (``['127.0.0.1', '::1']``).
 
 .. _pillar-postgresql-listen_port:
 

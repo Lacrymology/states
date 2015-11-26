@@ -15,6 +15,13 @@ openldap_port:
   dependencies:
     - openldap_procs
 
+openldap_port_ipv6:
+  description: LDAP Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 389 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - openldap_procs
+
 openldap_base:
   description: LDAP Base
   command: /usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt['pillar.get']('ldap:suffix') }}' {% if salt['pillar.get']('ldap:ssl', False) %} -T{% endif %} -3 -t {{ timeout }}

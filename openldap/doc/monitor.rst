@@ -24,6 +24,13 @@ openldap_port
 
 :doc:`index` LDAP Port is listening locally.
 
+.. _monitor-openldap_port_ipv6:
+
+openldap_port_ipv6
+~~~~~~~~~~~~~~~~~~
+
+:doc:`index` LDAP Port is listening locally using :ref:`glossary-IPv6`.
+
 .. _monitor-openldap_base:
 
 openldap_base

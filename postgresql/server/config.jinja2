@@ -35,7 +35,7 @@ password_encryption = on
 {#- master server (need to be connected from standby servers)
 and hot standby servers (hot_standby means serving read only requests)
 should are public server - expose to world#}
-{%- set listen_addresses  = salt['pillar.get']('postgresql:listen_addresses', 'localhost') %}
+{%- set listen_addresses  = salt['pillar.get']('postgresql:listen_addresses', ['127.0.0.1', '::1']) | join(', ') %}
 {%- if role is defined %}
     {%- if role == 'master' %}
         {%- set listen_addresses = '*' %}

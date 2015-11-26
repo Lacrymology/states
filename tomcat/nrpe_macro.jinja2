@@ -21,6 +21,15 @@ tomcat_port:
   dependencies:
     - tomcat_procs
 
+{%- if salt['monitoring.data']()['ip_addrs6']['public'] %}
+tomcat_port_ipv6:
+  description: Tomcat HTTP Local Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 8080 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - tomcat_procs
+{%- endif %}
+
 tomcat_command_port:
   description: Tomcat Command Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8005 -t {{ timeout }}

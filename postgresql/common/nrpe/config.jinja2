@@ -16,5 +16,12 @@ postgresql_port:
   dependencies:
     - postgresql_procs
 
+postgresql_port_ipv6:
+  description: PostgreSQL Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 5432 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - postgresql_procs
+
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context %}
 {{ postgresql_instance('postgresql.common', 'monitoring', username='monitoring', password=salt['password.pillar']('postgresql:monitoring:password', 10), check_empty=False) }}

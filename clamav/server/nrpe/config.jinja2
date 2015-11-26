@@ -19,6 +19,12 @@ clamav_port:
   dependencies:
     - clamav_procs
 
+clamav_port_ipv6:
+  description: ClamAV Port IPv6
+  command: "/usr/lib/nagios/plugins/check_tcp -H ::1 -p 3310"
+  dependencies:
+    - clamav_procs
+
 clamav_remote_port:
   description: ClamAV Remote Port
   check: check_tcp!3310

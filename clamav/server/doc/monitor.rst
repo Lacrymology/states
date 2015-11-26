@@ -37,6 +37,13 @@ clamav_port
 
 Monitor :doc:`index` local port :ref:`glossary-TCP` `3310`.
 
+.. _monitor-clamav_port_ipv6:
+
+clamav_port_ipv6
+~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-clamav_port` but for :ref:`glossary-IPv6`.
+
 .. _monitor-clamav_remote_port:
 
 clamav_remote_port

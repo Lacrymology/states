@@ -24,3 +24,20 @@ varnish_status
 ~~~~~~~~~~~~~~
 
 Monitor :doc:`index` :ref:`glossary-HTTP` connection status.
+
+Optional
+--------
+
+.. _monitor-varnish_port_ipv6:
+
+varnish_port_ipv6
+~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-varnish_port` but for :ref:`glossary-IPv6`.
+
+.. _monitor-varnish_status_ipv6:
+
+varnish_status_ipv6
+~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-varnish_status` but for :ref:`glossary-IPv6`.

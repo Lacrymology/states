@@ -34,6 +34,13 @@ rabbitmq_amqp_port
 
 :doc:`index` AMQP Port is open and can be accessed locally.
 
+.. _monitor-rabbitmq_amqp_port_ipv6:
+
+rabbitmq_amqp_port_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-rabbitmq_amqp_port` but for :ref:`glossary-IPv6`.
+
 .. _monitor-rabbitmq_amqp_port_remote:
 
 rabbitmq_amqp_port_remote

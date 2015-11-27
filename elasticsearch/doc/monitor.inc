@@ -12,6 +12,12 @@ config in :ref:`pillar-elasticsearch-cluster-nodes`.
 Check :doc:`/elasticsearch/doc/index` HTTP port
 ``9200``/:ref:`glossary-TCP`.
 
+|deployment|\-es_http_port_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Check :doc:`/elasticsearch/doc/index` HTTP port
+``9200``/:ref:`glossary-TCP` using :ref:`glossary-IPv6`.
+
 |deployment|\-es_http
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -19,8 +25,21 @@ Check elasticsearch HTTP status port ``9200``/:ref:`glossary-TCP`,
 expect return code `200 OK
 <http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#2xx_Success>`_.
 
+|deployment|\-es_http_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Check elasticsearch HTTP status port ``9200``/:ref:`glossary-TCP`
+using :ref:`glossary-IPv6`, expect return code `200 OK
+<http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#2xx_Success>`_.
+
 |deployment|\-es_port_transport
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Check :doc:`/elasticsearch/doc/index` transport port
 ``9300``/:ref:`glossary-TCP`.
+
+|deployment|\-es_port_transport_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Check :doc:`/elasticsearch/doc/index` transport port
+``9300``/:ref:`glossary-TCP` using :ref:`glossary-IPv6`.

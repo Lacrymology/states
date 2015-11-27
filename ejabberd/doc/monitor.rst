@@ -27,12 +27,26 @@ ejabberd_c2s_port
 
 Monitor :doc:`index` client to server port ``5222``/:ref:`glossary-TCP`.
 
+.. _monitor-ejabberd_c2s_port_ipv6:
+
+ejabberd_c2s_port_ipv6
+~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-ejabberd_c2s_port` but for :ref:`glossary-IPv6`.
+
 .. _monitor-ejabberd_admin_port:
 
 ejabberd_admin_port
 ~~~~~~~~~~~~~~~~~~~
 
 Monitor :doc:`index` amin port ``5280``/:ref:`glossary-TCP`.
+
+.. _monitor-ejabberd_admin_port_ipv6:
+
+ejabberd_admin_port_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-ejabberd_admin_port` but for :ref:`glossary-IPv6`.
 
 .. _monitor-ejabberd_admin_http:
 
@@ -44,6 +58,13 @@ http://127.0.0.1:5280/admin
 
 Expected return code: '401 Unauthorized' (:doc:`index`
 admin web interface require authentication).
+
+.. _monitor-ejabberd_admin_http_ipv6:
+
+ejabberd_admin_http_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-ejabberd_admin_http` but for :ref:`glossary-IPv6`.
 
 .. _monitor-ejabberd_backup_postgresql_procs:
 
@@ -94,3 +115,10 @@ Monitor :doc:`index` server to server port ``5269``/:ref:`glossary-TCP`.
 Only use if an :ref:`glossary-IPv6` address is present.
 
 .. include:: /nginx/doc/monitor_ipv6.inc
+
+.. _monitor-ejabberd_s2s_port_ipv6:
+
+ejabberd_s2s_port_ipv6
+~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-ejabberd_s2s_port` but for :ref:`glossary-IPv6`.

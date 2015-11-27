@@ -24,9 +24,21 @@
   dependencies:
     - {{ process_check_name }}
 
+{{ formula|replace('.', '_') }}-es_http_port_ipv6:
+  description: {{ formula|title }} ES HTTP Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 9200
+  dependencies:
+    - {{ process_check_name }}
+
 {{ formula|replace('.', '_') }}-es_http:
   description: {{ formula|title }} ES HTTP Interface
   command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u / -p 9200 -e '200 OK'
+  dependencies:
+    - {{ formula|replace('.', '_') }}-es_http_port
+
+{{ formula|replace('.', '_') }}-es_http_ipv6:
+  description: {{ formula|title }} ES HTTP Interface IPv6
+  command: /usr/lib/nagios/plugins/check_http -H ::1 -u / -p 9200 -e '200 OK'
   dependencies:
     - {{ formula|replace('.', '_') }}-es_http_port
 {%- endif %}
@@ -34,6 +46,12 @@
 {{ formula|replace('.', '_') }}-es_port_transport:
   description: {{ formula|title }} ES Transport Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get'](pillar_string + ':port', 9300) }}
+  dependencies:
+    - {{ process_check_name }}
+
+{{ formula|replace('.', '_') }}-es_port_transport_ipv6:
+  description: {{ formula|title }} ES Transport Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p {{ salt['pillar.get'](pillar_string + ':port', 9300) }}
   dependencies:
     - {{ process_check_name }}
 {%- endmacro %}

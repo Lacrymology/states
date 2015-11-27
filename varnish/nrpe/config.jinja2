@@ -31,3 +31,25 @@ varnish_status:
   timeout: {{ timeout }}
   dependencies:
     - varnish_port
+
+{%- if listen_address == '127.0.0.1' or '::' in listen_address %}
+  {%- set listen_address_ipv6 = '::1' if listen_address == '127.0.0.1' else listen_address %}
+varnish_port_ipv6:
+  description: Varnish HTTP Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H {{ listen_address_ipv6 }} -p {{ listen_port }} -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - varnish_procs
+
+varnish_status_ipv6:
+  description: Varnish HTTP status IPv6
+  command: >
+      /usr/lib/nagios/plugins/check_http -I {{ listen_address_ipv6 }} -p {{ listen_port }} -t {{ timeout }}
+{%- if monitor %}
+  {%- if monitor_hostname %} -H "{{ monitor_hostname }}"{% endif %}
+  {%- if monitor_response in monitor %} -e "{{ monitor_response }}"{% endif %}
+{%- endif %}
+  timeout: {{ timeout }}
+  dependencies:
+    - varnish_port_ipv6
+{%- endif %}

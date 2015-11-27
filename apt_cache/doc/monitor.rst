@@ -21,6 +21,13 @@ apt_cache_port
 :doc:`index` port :ref:`glossary-TCP` ``3142`` is listening on
 :ref:`glossary-localhost`.
 
+.. _monitor-apt_cache_port_ipv6:
+
+apt_cache_port_ipv6
+~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-apt_cache_port` but for :ref:`glossary-IPv6`.
+
 .. include:: /nginx/doc/monitor.inc
 
 Optional

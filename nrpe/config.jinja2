@@ -67,6 +67,10 @@ loopback_interface:
   description: Loopback Interface
   command: /usr/lib/nagios/plugins/check_ping -H 127.0.0.1 -p 1 -w 100,100% -c 100,100%
 
+loopback_interface_ipv6:
+  description: Loopback Interface IPv6
+  command: /usr/lib/nagios/plugins/check_ping -H ::1 -p 1 -w 100,100% -c 100,100%
+
 oom_messages:
   description: Out Of Memory Messages
   command: sudo /usr/lib/nagios/plugins/check_oom.py --formula=nrpe --check=oom_messages

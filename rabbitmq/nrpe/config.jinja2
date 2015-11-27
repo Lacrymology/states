@@ -20,6 +20,13 @@ rabbitmq_amqp_port:
   dependencies:
     - rabbitmq_procs
 
+rabbitmq_amqp_port_ipv6:
+  description: RabbitMQ Local AMQP Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 5672 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - rabbitmq_procs
+
 rabbitmq_http:
   description: RabbitMQ HTTP Protocol
   command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u / -p 15672 -e '200 OK' -I 127.0.0.1 -t {{ timeout }}

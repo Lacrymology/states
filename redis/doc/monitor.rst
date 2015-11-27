@@ -23,6 +23,13 @@ redis_port
 
 Monitor :doc:`index` local port :ref:`glossary-TCP` ``6379``.
 
+.. _monitor-redis_port_ipv6:
+
+redis_port_ipv6
+~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-redis_port` but for :ref:`glossary-IPv6`.
+
 .. _monitor-redis_remote_port:
 
 redis_remote_port

@@ -74,7 +74,7 @@ varnish:listen_address
 
 IP address to listen for client requests.
 
-Possible values: A valid host name, IPv4 or IPv6 adress. If empty,
+Possible values: A valid host name, IPv4 or IPv6 address. If empty,
 varnish will listen on all interfaces.
 
 Default: listen on all interfaces (``''``).

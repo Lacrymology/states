@@ -4,12 +4,9 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-mongodb_http:
-  description: MongoDB HTTP Interface
-  command: /usr/lib/nagios/plugins/check_http -t {{ timeout }} -I 127.0.0.1 -p 28017
-  timeout: {{ timeout }}
-  dependencies:
-    - mongodb_http_port
+mongodb_procs:
+  description: MongoDB Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C mongod -u mongodb'
 
 mongodb_port:
   description: MongoDB Port
@@ -18,9 +15,12 @@ mongodb_port:
   dependencies:
     - mongodb_procs
 
-mongodb_procs:
-  description: MongoDB Daemon
-  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C mongod -u mongodb'
+mongodb_port_ipv6:
+  description: MongoDB Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 27017 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - mongodb_procs
 
 mongodb_http_port:
   description: MongoDB HTTP Port
@@ -28,3 +28,24 @@ mongodb_http_port:
   timeout: {{ timeout }}
   dependencies:
     - mongodb_procs
+
+mongodb_http_port_ipv6:
+  description: MongoDB HTTP Port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 28017 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - mongodb_procs
+
+mongodb_http:
+  description: MongoDB HTTP Interface
+  command: /usr/lib/nagios/plugins/check_http -t {{ timeout }} -I 127.0.0.1 -p 28017
+  timeout: {{ timeout }}
+  dependencies:
+    - mongodb_http_port
+
+mongodb_http_ipv6:
+  description: MongoDB HTTP Interface IPv6
+  command: /usr/lib/nagios/plugins/check_http -t {{ timeout }} -I ::1 -p 28017
+  timeout: {{ timeout }}
+  dependencies:
+    - mongodb_http_port_ipv6

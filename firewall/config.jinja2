@@ -62,13 +62,13 @@ COMMIT
     {%- endif -%}
     {%- for addr_type in addr_types -%}
       {%- set ip_addr = mine[host][ip_addrs_key][addr_type] if ip_addrs_key in mine[host] else None %}
-      {%- if ip_addr and ip_addr not in pillars_ip %}
+      {%- if ip_addr and ip_addr not in allowed_ips %}
 -A INPUT -s {{ mine[host][ip_addrs_key][addr_type] }}/{{ netmask }} -j ACCEPT
       {%- endif -%}
     {%- endfor -%}
   {%- endfor -%}
-  {%- for host in pillars_ip %}
--A INPUT -s {{ host }}/{{ netmask }} -j ACCEPT
+  {%- for ip in allowed_ips %}
+-A INPUT -s {{ ip }} -j ACCEPT
   {%- endfor -%}
   {%- for protocol, ports in filter.iteritems() -%}
     {%- set anywhere_ports = [] %}

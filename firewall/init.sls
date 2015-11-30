@@ -25,7 +25,7 @@ iptables:
     - context:
         ip_addrs_key: ip_addrs
         allowed_protocols: {{ allowed_protocols }}
-        pillars_ip: {{ salt['pillar.get']('firewall:allowed_ips', []) }}
+        allowed_ips: {{ salt['pillar.get']('firewall:allowed_ips', []) }}
         filter: {{ salt['pillar.get']('firewall:filter', {}) }}
         blacklist: {{ salt['pillar.get']('firewall:blacklist', []) }}
     - require:
@@ -62,7 +62,7 @@ ip6tables:
     - context:
         ip_addrs_key: ip_addrs6
         allowed_protocols: {{ allowed_protocol6s }}
-        pillars_ip: {{ salt['pillar.get']('firewall:allowed_ip6s', []) }}
+        allowed_ips: {{ salt['pillar.get']('firewall:allowed_ip6s', []) }}
         filter: {{ salt['pillar.get']('firewall:filter6', {}) }}
         blacklist: {{ salt['pillar.get']('firewall:blacklist6', []) }}
     - require:

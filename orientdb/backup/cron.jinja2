@@ -10,7 +10,7 @@ trap "log_stop_script \$?" EXIT
 
 cd /var/backups/orientdb
 for file in $(find . -name 'orientdb-*.zip'); do
-    if ! lsof -f -- $file; then
+    if ! lsof -f -- $file >/dev/null; then
         /usr/local/bin/backup-store $file
     fi
 done

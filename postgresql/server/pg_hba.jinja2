@@ -3,10 +3,10 @@
 {#- http://www.postgresql.org/docs/devel/static/auth-pg-hba-conf.html #}
 local all postgres peer
 local all all peer
-host all all 127.0.0.1/32 md5
 {%- for dbname, username in salt['pillar.get']('postgresql:local_trust', {}).iteritems() %}
 host {{ dbname }} {{ username }} 127.0.0.1/32 trust
 {%- endfor %}
+host all all 127.0.0.1/32 md5
 host all all ::1/128 md5
 {%- for cidr in salt["pillar.get"]("postgresql:remote", []) %}
 host all all {{ cidr }} md5

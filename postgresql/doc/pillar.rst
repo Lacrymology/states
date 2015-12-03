@@ -23,9 +23,24 @@ Example::
          - 10.0.0.6
     monitoring:
       password: mypassword
+    local_trust:
+      backend: jenkins
 
 Optional
 --------
+
+.. _pillar-postgresql-local_trust:
+
+postgresql:local_trust
+~~~~~~~~~~~~~~~~~~~~~~
+
+Dictionary of trusted connections to local host. Each pair in form of::
+
+  dbname: username
+
+Default: trust no local host connection (``{}``).
+
+.. _pillar-postgresql-version:
 
 postgresql:version
 ~~~~~~~~~~~~~~~~~~

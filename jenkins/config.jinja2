@@ -31,4 +31,4 @@ AJP_PORT=-1
 
 PREFIX=/jenkins
 
-JENKINS_ARGS="--webroot=/var/cache/jenkins/war --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT"
+JENKINS_ARGS="--webroot=/var/cache/jenkins/war --httpListenAddress=$HTTP_HOST --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT"

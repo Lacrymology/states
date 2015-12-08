@@ -10,12 +10,27 @@ kernel:
     - required:
       - cmd: apt_sources
 
-{%- set kernel_files = salt['file.find'](path='/boot', name='vmlinuz-*', type='f', print='name') %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
 
-{%- for file in kernel_files if file.replace('vmlinuz-', '') != grains['kernelrelease'] %}
-  {%- for type in ('image', 'headers') %}
-{{ file.replace('vmlinuz', 'linux-' ~ type) }}:
+bikeshed:
+  pkgrepo:
+    - managed
+{%- if files_archive %}
+    - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/bikeshed {{ grains['lsb_distrib_codename'] }} main
+    - key_url: salt://kernel/image/key.gpg
+{%- else %}
+    - ppa: bikeshed/ppa
+{%- endif %}
+    - file: /etc/apt/sources.list.d/bikeshed.list
+    - clean_file: True
+    - require:
+      - cmd: apt_sources
   pkg:
-    - purged
-  {%- endfor %}
-{%- endfor %}
+    - installed
+    - require:
+      - pkgrepo: bikeshed
+  cmd:
+    - run
+    - name: purge-old-kernels -q -y --force-yes
+    - require:
+      - pkg: bikeshed

@@ -28,7 +28,7 @@ ruby:
       - pkg: old_ruby
       - cmd: apt_sources
       {#- gem requires SSL to works when packages are available trough https #}
-      - pkg: ssl-cert
+      - cmd: ca-certificates
       - cmd: system_locale
   gem:
     - installed

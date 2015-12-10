@@ -18,13 +18,6 @@ postgresql_port
 
 :doc:`index` port can be connected locally.
 
-.. _monitor-postgresql_port_ipv6:
-
-postgresql_port_ipv6
-~~~~~~~~~~~~~~~~~~~~
-
-Same as :ref:`monitor-postgresql_port` but for :ref:`glossary-IPv6`.
-
 monitoring_postgresql
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -35,3 +28,13 @@ monitoring_postgresql_encoding
 
 :doc:`index` Database ``monitoring`` uses
 `character encoding UTF8 <http://en.wikipedia.org/wiki/UTF-8>`_.
+
+Optional
+--------
+
+.. _monitor-postgresql_port_ipv6:
+
+postgresql_port_ipv6
+~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`monitor-postgresql_port` but for :ref:`glossary-IPv6`.

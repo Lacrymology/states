@@ -49,17 +49,3 @@ Optional
 Only use if an :ref:`glossary-IPv6` address is present.
 
 .. include:: /nginx/doc/monitor_ipv6.inc
-
-.. _monitor-jenkins_port_ipv6:
-
-jenkins_port_ipv6
-~~~~~~~~~~~~~~~~~
-
-Same as :ref:`monitor-jenkins_port` but for :ref:`glossary-IPv6`.
-
-.. _monitor-jenkins_http_ipv6:
-
-jenkins_http_ipv6
-~~~~~~~~~~~~~~~~~
-
-Same as :ref:`monitor-jenkins_http` but for :ref:`glossary-IPv6`.

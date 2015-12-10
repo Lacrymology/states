@@ -24,19 +24,3 @@ jenkins_http:
   timeout: {{ timeout }}
   dependencies:
     - jenkins_port
-
-{%- if salt['monitoring.data']()['ip_addrs6']['public'] %}
-jenkins_port_ipv6:
-  description: Jenkins Port IPv6
-  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 8080 -t {{ timeout }}
-  timeout: {{ timeout }}
-  dependencies:
-    - jenkins_procs
-
-jenkins_http_ipv6:
-  description: Jenkins HTTP IPv6
-  command: /usr/lib/nagios/plugins/check_http -I ::1 -p 8080 -u '/login' -e 'HTTP/1.1 200 OK' -t {{ timeout }}
-  timeout: {{ timeout }}
-  dependencies:
-    - jenkins_port_ipv6
-{%- endif %}

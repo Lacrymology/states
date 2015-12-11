@@ -2,27 +2,29 @@
 
 {%- set first_ip = salt['network.ip_addrs']()[0] -%}
 {%- set first_ipv6 = salt['monitoring.data']()['ip_addrs6']['public'] %}
-{%- set reply = '301 Moved Permanently' -%}
+{%- set default_status = '301 Moved Permanently' -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 {%- for map in salt['pillar.get']('redirect:map') -%}
   {%- for hostname in map['hostnames'] %}
 redirect_nginx_http_{{ hostname|replace('.', '_') }}:
   description: Redirect NGINX HTTP Protocol
-  command: /usr/lib/nagios/plugins/check_http -H {{ hostname }} -u / -p 80 -e '{{ reply }}' -I {{ first_ip }}
+  command: /usr/lib/nagios/plugins/check_http -H {{ hostname }} -u / -p 80 -e '{{ status | default(default_status) }}' -I {{ first_ip }}
   dependencies:
     - nginx_master
 
     {%- if first_ipv6 %}
 redirect_nginx_http_{{ hostname|replace('.', '_') }}_ipv6:
   description: Redirect NGINX HTTP Protocol with IPv6
-  command: /usr/lib/nagios/plugins/check_http -6 -H {{ hostname }} -u / -p 80 -e '{{ reply }}' -I [{{ first_ipv6 }}]
+  command: /usr/lib/nagios/plugins/check_http -6 -H {{ hostname }} -u / -p 80 -e '{{ status | default(default_status) }}' -I [{{ first_ipv6 }}]
   dependencies:
     - nginx_master
     {%- endif %}
 
 redirect_remote_http_{{ hostname|replace('.', '_') }}:
   description: Redirect Remote HTTP {{ hostname }}
-  check: check_http!{{ hostname }}!/!301
+  check: check_http!{{ hostname }}!/!'{{ status | default(default_status) }}'
   {{ passive_interval(15) }}
   passive: False
   dependencies:
@@ -31,14 +33,14 @@ redirect_remote_http_{{ hostname|replace('.', '_') }}:
     {%- if map.get('ssl', False) %}
 redirect_nginx_https_{{ hostname|replace('.', '_') }}:
   description: Redirect NGINX HTTPS Protocol
-  command: /usr/lib/nagios/plugins/check_http -S -H {{ hostname }} -u / -p 443 -e '{{ reply }}' -I {{ first_ip }}
+  command: /usr/lib/nagios/plugins/check_http -S -H {{ hostname }} -u / -p 443 -e '{{ status | default(default_status) }}' -I {{ first_ip }}
   dependencies:
     - nginx_master
 
       {%- if first_ipv6 %}
 redirect_nginx_https_{{ hostname|replace('.', '_') }}_ipv6:
   description: Redirect NGINX HTTPS Protocol with IPv6
-  command: /usr/lib/nagios/plugins/check_http -6 -S -H {{ hostname }} -u / -p 443 -e '{{ reply }}' -I {{ first_ipv6 }}
+  command: /usr/lib/nagios/plugins/check_http -6 -S -H {{ hostname }} -u / -p 443 -e '{{ status | default(default_status) }}' -I {{ first_ipv6 }}
   dependencies:
     - nginx_master
       {%- endif %}
@@ -65,7 +67,7 @@ redirect_ssl_configuration_{{ hostname|replace('.', '_') }}:
 
 redirect_remote_https_{{ hostname|replace('.', '_') }}:
   description: Redirect Remote HTTPS {{ hostname }}
-  check: check_https!{{ hostname }}!/!301
+  check: check_https!{{ hostname }}!/!'{{ status | default(default_status) }}'
   {{ passive_interval(15) }}
   passive: False
   dependencies:

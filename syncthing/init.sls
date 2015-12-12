@@ -4,7 +4,7 @@
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- set mirror = files_archive|replace('https://', 'http://') ~ "/mirror/syncthing"
     if files_archive else "http://archive.robotinfra.com/mirror/syncthing" %}
-{%- set version = "0.11.24" %}
+{%- set version = "0.12.7" %}
 {%- set repo = mirror ~ "/" ~ version %}
 {%- set ssl = salt["pillar.get"]("syncthing:ssl", False) %}
 {%- set hostnames = salt["pillar.get"]("syncthing:hostnames", []) %}

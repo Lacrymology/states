@@ -57,6 +57,18 @@ rsyslog:
       - file: /var/spool/rsyslog
       - user: rsyslog
       - file: /var/log/lastlog
+      - file: /etc/init/rsyslog.conf
+
+/etc/init/rsyslog.conf:
+  file:
+    - managed
+    - source: salt://rsyslog/upstart.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: rsyslog
 
 /var/log/lastlog:
   file:

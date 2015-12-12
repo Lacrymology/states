@@ -1,0 +1,20 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+description	"system logging daemon"
+
+start on filesystem and net-device-up IFACE=lo
+stop on runlevel [06]
+
+expect fork
+respawn
+
+pre-start script
+    /lib/init/apparmor-profile-load usr.sbin.rsyslogd
+end script
+
+script
+    . /etc/default/rsyslog
+    exec rsyslogd $RSYSLOGD_OPTIONS
+end script

@@ -4,7 +4,7 @@
 
 description	"system logging daemon"
 
-start on filesystem
+start on filesystem and net-device-up IFACE=lo
 stop on runlevel [06]
 
 expect fork

@@ -109,8 +109,13 @@ doc-publish:
         appname: doc
         root: /usr/local/salt-common-doc
 
-{%- if ssl %}
 extend:
+  doc:
+    cmd:
+      - cwd: /usr/local/salt-common-doc-source
+      - watch:
+        - git: doc-source
+{%- if ssl %}
   nginx.conf:
     file:
       - context:

@@ -36,7 +36,7 @@ include:
 {%- if grains["osarch"] == "amd64" %}
   {%- set goarch = "amd64" %}
   {%- set gitlab_git_http_server_hash = "md5=e3bc8da0b0103907b0e97021e66a9454" %}
-{%- elif grains["osarch"] == "amd64" %}
+{%- elif grains["osarch"] in ['i386', 'i686'] %}
   {%- set goarch = "386" %}
   {%- set gitlab_git_http_server_hash = "md5=bf1dd0c3fd29fd56d41c757d8ccf02b7" %}
 {%- endif %}

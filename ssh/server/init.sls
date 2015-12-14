@@ -35,6 +35,34 @@ openssh-server:
       - file: openssh-server
 {#- PID file owned by root, no need to manage #}
 
+{%- if salt['pillar.get']('ssh:server:host_keys', {}) %}
+  {%- for type in ('dsa', 'rsa') %}
+/etc/ssh/ssh_host_{{ type }}_key:
+  file:
+    - managed
+    - contents_pillar: ssh:server:host_keys:{{ type }}
+    - user: root
+    - group: root
+    - mode: 400
+    - require:
+      - pkg: openssh-server
+
+ssh_server_{{ type }}_public_host_key:
+  cmd:
+    - wait
+    - name: ssh-keygen -y -f /etc/ssh/ssh_host_{{ type }}_key > /etc/ssh/ssh_host_{{ type }}_key.pub
+    - watch:
+      - file: /etc/ssh/ssh_host_{{ type }}_key
+  file:
+    - managed
+    - name: /etc/ssh/ssh_host_{{ type }}_key.pub
+    - mode: 444
+    - replace: False
+    - require:
+      - cmd: ssh_server_{{ type }}_public_host_key
+  {%- endfor %}
+{%- endif %}
+
 ssh_server_root_authorized_keys:
   file:
     - managed

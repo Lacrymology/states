@@ -193,10 +193,20 @@ echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_t
 
 sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
 sudo salt -t 5 "$BUILD_IDENTITY" --output yaml cmd.run "cat /root/salt/*.xml"
-echo "if below command show that integration.py still is running, \
-      test has not finished and cmd.run integration.py returned too soon."
-sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run 'ps xau | grep integration.p[y]' \
-    --out yaml | grep "integration.p[y]" || true
+
+echo "Check if cmd.run integration.py returned, if not, wait up to 5 minutes \
+      for test finishing."
+for i in {1..5}; do
+  tmpfile=$(mktemp)
+  sudo salt -t 5 "$BUILD_IDENTITY" --output yaml cmd.run 'ps xau | grep integration.p[y]' > ${tmpfile}
+  if ( grep integration.p[y] ${tmpfile} ); then
+     sleep 60
+  else
+      ;;
+  fi
+  rm -f ${tmpfile}
+done
+
 sudo salt -t 5 "$BUILD_IDENTITY" --output yaml cmd.run "salt-call -c $CUSTOM_CONFIG_DIR state.sls test.teardown -lerror"
 if ${DESTROY_VM:-false}; then
     destroy_test_vm

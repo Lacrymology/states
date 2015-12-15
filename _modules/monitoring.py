@@ -135,9 +135,20 @@ def data():
     else:
         # from network interface
         interface = __salt__['pillar.get']('network_interface', 'eth0')
+
+        def get_non_private_ip():
+            ips = __salt__['network.ip_addrs'](interface)
+            for ip in ips:
+                if not ip.startswith(
+                    tuple(['10.', '192.168.'] +
+                          ['172.{0}.'.format(i) for i in range(16, 32)])
+                ):
+                    return ip
+            return ips[0]
+
         try:
             output['ip_addrs'] = {
-                'public': __salt__['network.ip_addrs'](interface)[0]
+                'public': get_non_private_ip()
             }
         except IndexError:
             # if nothing was found, just grab all IP address

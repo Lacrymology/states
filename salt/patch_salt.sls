@@ -44,3 +44,12 @@ patch_salt_fileclient_fix_communication:
     - group: root
     - mode: 644
     - source: salt://salt/patch/fileclient.py
+
+patch_salt_sentry_logging_handler:
+  file:
+    - managed
+    - name: {{ grains['saltpath'] }}/log/handlers/sentry_mod.py
+    - source: salt://salt/patch/sentry_mod.py
+    - user: root
+    - group: root
+    - mode: 644

@@ -2,7 +2,7 @@
 {%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
 
 {%- macro nginx_instance(formula, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", pillar_prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False, deployment=None, extra_dependencies=()) -%}
-    {%- set first_ip = salt['network.ip_addrs']()[0] -%}
+    {%- set first_ip = salt['monitoring.data']()['ip_addrs']['public'] -%}
     {%- if not pillar_prefix -%}
         {%- set pillar_prefix = formula -%}
     {%- endif -%}

@@ -1,6 +1,6 @@
 {%- from 'nrpe/passive.jinja2' import passive_interval with context %}
 
-{%- set first_ip = salt['network.ip_addrs']()[0] -%}
+{%- set first_ip = salt['monitoring.data']()['ip_addrs']['public'] -%}
 {%- set first_ipv6 = salt['monitoring.data']()['ip_addrs6']['public'] %}
 {%- set default_status = '301 Moved Permanently' -%}
 

@@ -102,6 +102,29 @@ class _DontExistData(object):
     pass
 
 
+def _get_first_ip(interface, addr_type):
+    '''
+    Get the first public or private IP of an interface
+    If that interface does not exist, grab from all interfaces
+    '''
+    default_ip = __salt__['network.ip_addrs']()[0]
+    try:
+        if addr_type == 'public':
+            return next(
+                (public_ip
+                 for public_ip in __salt__['network.ip_addrs'](interface)
+                 if not __salt__['network.is_private'](public_ip)),
+                default_ip)
+        else:
+            return next(
+                (private_ip
+                 for private_ip in __salt__['network.ip_addrs'](interface)
+                 if __salt__['network.is_private'](private_ip)),
+                default_ip)
+    except IndexError:
+        return default_ip
+
+
 def data():
     '''
     Return data specific for this minion required for monitoring.
@@ -123,9 +146,15 @@ def data():
 
     # figure how monitoring can reach this host
     ip_addrs = __salt__['pillar.get']('ip_addrs', {})
+    interface = __salt__['pillar.get']('network_interface', 'eth0')
     if ip_addrs:
         # from pillar data
-        output['ip_addrs'] = ip_addrs
+        output['ip_addrs'] = {
+            'public': ip_addrs.get('public',
+                                   _get_first_ip(interface, 'public')),
+            'private': ip_addrs.get('private',
+                                    _get_first_ip(interface, 'private'))
+        }
     elif 'amazon_ec2' in output:
         # if IP not defined, just pick those from EC2
         output['ip_addrs'] = {
@@ -134,28 +163,10 @@ def data():
         }
     else:
         # from network interface
-        interface = __salt__['pillar.get']('network_interface', 'eth0')
-
-        def get_non_private_ip():
-            ips = __salt__['network.ip_addrs'](interface)
-            for ip in ips:
-                if not ip.startswith(
-                    tuple(['10.', '192.168.'] +
-                          ['172.{0}.'.format(i) for i in range(16, 32)])
-                ):
-                    return ip
-            return ips[0]
-
-        try:
-            output['ip_addrs'] = {
-                'public': get_non_private_ip()
-            }
-        except IndexError:
-            # if nothing was found, just grab all IP address
-            output['ip_addrs'] = {
-                'public': __salt__['network.ip_addrs']()[0]
-            }
-        output['ip_addrs']['private'] = output['ip_addrs']['public']
+        output['ip_addrs'] = {
+            'public': _get_first_ip(interface, 'public'),
+            'private': _get_first_ip(interface, 'private')
+        }
 
     # figure how monitoring can reach this host using IPv6
     ip_addrs6 = __salt__['pillar.get']('ip_addrs6', {})

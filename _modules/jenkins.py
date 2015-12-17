@@ -20,11 +20,11 @@ def latest_build(jenkins_addr, jobname, username, token):
     Access API of given jobname at jenkins_addr
     and find out latest build number
     '''
-
-    request_url = 'https://{0}/job/{1}/api/json'.format(jenkins_addr, jobname)
+    request_url = '{0}/job/{1}/api/json'.format(jenkins_addr.rstrip('/'),
+                                                jobname)
     build_number = None
     try:
-        r = requests.post(request_url, auth=(username, token))
+        r = requests.get(request_url, auth=(username, token))
         build_number = r.json()['lastStableBuild'].get('number', None)
     except Exception as e:
         logger.error(e, exc_info=True)

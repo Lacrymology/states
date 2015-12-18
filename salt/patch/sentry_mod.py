@@ -101,7 +101,7 @@ def setup_handlers():
         log.debug('No \'sentry_handler\' key was found in the configuration')
         return False
 
-    if 'test' in __opts__:
+    if __opts__.get('test', False):
         log.debug('Do not send alerts when running in test mode')
         return False
 

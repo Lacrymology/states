@@ -16,13 +16,17 @@ external_auth:
   {{ authen_system }}:
     {%- for username in external_auth[authen_system] %}
     {{ username }}:
-      {%- for id_or_func, funcs in external_auth[authen_system][username]['acl'].iteritems() %}
+      {% set acl = external_auth[authen_system][username]['acl'] %}
+      {%- for id_or_func in acl %}
+        {%- if acl[id_or_func] is iterable %}
       - '{{ id_or_func }}':
-        {%- for func in funcs %}
+          {%- for func in acl[id_or_func] %}
         - '{{ func }}'
-        {%- endfor %}
+          {%- endfor %}
+        {%- else %}
+      - '{{ id_or_func }}'
+        {%- endif %}
       {%- endfor %}
-
     {%- endfor %}
   {%- endfor %}
 {%- endif %}

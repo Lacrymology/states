@@ -37,7 +37,7 @@ user_{{ user }}:
     - wait
     - name: shadow.set_password
     - m_name: {{ user }}
-    - password: {{ salt['password.encrypt_shadow'](external_auth[authen_system][user]) }}
+    - password: {{ salt['password.encrypt_shadow'](external_auth[authen_system][user]['password']) }}
     - watch:
       - user: user_{{ user }}
         {%- endfor %}

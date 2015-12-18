@@ -16,8 +16,13 @@ external_auth:
   {{ authen_system }}:
     {%- for username in external_auth[authen_system] %}
     {{ username }}:
-      - .*
-      - '@jobs'
+      {%- for id_or_func, funcs in external_auth[authen_system][username]['acl'].iteritems() %}
+      - '{{ id_or_func }}':
+        {%- for func in funcs %}
+        - '{{ func }}'
+        {%- endfor %}
+      {%- endfor %}
+
     {%- endfor %}
   {%- endfor %}
 {%- endif %}

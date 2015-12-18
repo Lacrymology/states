@@ -41,21 +41,20 @@ salt_api:ssl_redirect
 salt_api:external_auth
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Dict of ``{authenticate_system: {username: password}}`` used to authenticate
-against for run :doc:`/salt/doc/index` modules. Possible ``authenticate_system``
-are: ``pam`` or
+Example::
+
+     external_auth:
+     pam:
+      test:
+        password: pass
+        acl:
+          '*':
+            - '@jobs'
+            - .*
+
+Dict of users used to authenticate against for run :doc:`/salt/doc/index`
+modules. Possible ``authenticate_system`` are: ``pam`` or
 ``ldap``. See http://docs.saltstack.com/en/latest/topics/eauth/index.html for
 more detail.
 
 Default: ``{}``
-
-Conditional
------------
-
-.. _pillar-salt_api-external_auth-pam:
-
-salt_api:external_auth:pam
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Dict of ``{user: password}`` which will be given permission to run
-:doc:`/salt/doc/index` modules through :doc:`index`.

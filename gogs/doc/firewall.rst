@@ -5,4 +5,4 @@ Firewall
 
 - :doc:`/nginx/doc/index` :doc:`/nginx/doc/firewall`
 
-And the port specified in :ref:`pillar-gogs_ssh_port`.
+And the port specified in :ref:`pillar-gogs-ssh`.

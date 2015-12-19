@@ -2,17 +2,8 @@
 
 include:
   - git
+  - git.server.user
   - ssh.server
-
-git-server:
-  user:
-    - present
-    - name: git
-    - gid_from_name: True
-    - shell: /usr/bin/git-shell
-    - home: /var/lib/git-server
-    - require:
-      - pkg: git
 
 {%- set keys = salt['pillar.get']('git_server:keys') %}
 {% for key in keys %}

@@ -4,7 +4,7 @@ Pillar
 .. include:: /doc/include/add_pillar.inc
 
 - :doc:`/git/doc/index` :doc:`/git/doc/pillar`
-- :doc:`/postgresql/doc/index` :doc:`/git/postgresql/pillar`
+- :doc:`/postgresql/doc/index` :doc:`/postgresql/doc/pillar`
 - :doc:`/nginx/doc/index` :doc:`/nginx/doc/pillar`
 
 Mandatory

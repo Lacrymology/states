@@ -67,14 +67,29 @@ ssh_known_host_{{ domain }}:
 {%- set keyname_contents = salt['pillar.get']('ssh:keys', {}) -%}
 
 {%- for local_user in user_keys %}
+ssh_{{ local_user }}:
+  group:
+    - present
+    - name: {{ local_user }}
+  user:
+    - present
+    - name: {{ local_user }}
+    - gid_from_name: True
+    - require:
+      - group: ssh_{{ local_user }}
+
 ssh_key_dir_for_user_{{ local_user }}:
   file:
     - directory
     - clean: True
     - name: /etc/ssh/keys/{{ local_user }}
+    - user: {{ local_user }}
+    - group: {{ local_user }}
     - mode: 750
     - require:
       - file: /etc/ssh/keys
+      - user: ssh_{{ local_user }}
+      - group: ssh_{{ local_user }}
     - require_in:
       - file: openssh-client
 
@@ -84,11 +99,15 @@ ssh_private_key_{{ local_user }}_{{ keyname }}:
     - managed
     - name: /etc/ssh/keys/{{ local_user }}/{{ keyname }}
     - makedirs: True {#- file.directory state run after this will set the expected dir mode/owner #}
+    - user: {{ local_user }}
+    - group: {{ local_user }}
     - mode: 400
     - contents: |
         {{ keyname_contents[keyname] | indent(8) }}
     - require:
       - file: /etc/ssh/keys
+      - user: ssh_{{ local_user }}
+      - group: ssh_{{ local_user }}
     - require_in:
       - file: ssh_key_dir_for_user_{{ local_user }}
 
@@ -103,6 +122,8 @@ ssh_public_key_{{ local_user }}_{{ keyname }}:
   file:
     - managed
     - name: /etc/ssh/keys/{{ local_user }}/{{ keyname }}.pub
+    - user: {{ local_user }}
+    - group: {{ local_user }}
     - mode: 400
     - replace: False
     - require:

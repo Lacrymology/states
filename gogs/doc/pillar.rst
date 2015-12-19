@@ -66,7 +66,7 @@ gogs:smtp
 
 .. include:: /mail/doc/smtp.inc
 
-.. _pillar-gogs-smtp:
+.. _pillar-gogs-db_password:
 
 gogs:db_password
 ~~~~~~~~~~~~~~~~

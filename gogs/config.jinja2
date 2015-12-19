@@ -1,0 +1,62 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- set domain = salt['pillar.get']('gogs:hostnames')[0] -%}
+{%- set smtp = salt['pillar.get']('gitlab:smtp', False) -%}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+APP_NAME = Gogs
+RUN_USER = git
+RUN_MODE = prod
+
+[database]
+DB_TYPE = postgres
+NAME = gogs
+SSL_MODE = disable
+USER = gogs
+PASSWD = {{ db_password }}
+HOST = 127.0.0.1
+
+[repository]
+ROOT = /var/lib/gogs/repositories
+
+[server]
+DOMAIN = {{ domain }}
+HTTP_PORT = 3000
+ROOT_URL = http{% if ssl %}s{% endif %}://{{ domain }}/
+DISABLE_SSH = false
+START_SSH_SERVER = true
+SSH_PORT = {{ ssh_port }}
+OFFLINE_MODE = false
+
+[mailer]
+{%- if salt['pillar.get']('gitlab:smtp', False) %}
+ENABLED = true
+HOST = {{ smtp['server'] }}
+FROM = {{ smtp['user'] }}
+USER = {{ smtp['user'] }}
+PASSWD = {{ smtp['password'] }}
+{%- else %}
+ENABLED = false
+{%- endif %}
+
+[service]
+REGISTER_EMAIL_CONFIRM = false
+ENABLE_NOTIFY_MAIL = true
+# for initial user creation, please set that to false, manually
+DISABLE_REGISTRATION = true
+ENABLE_CAPTCHA = false
+REQUIRE_SIGNIN_VIEW = true
+
+[picture]
+DISABLE_GRAVATAR = true
+
+[session]
+PROVIDER = file
+PROVIDER_CONFIG = /var/lib/gogs
+
+[log]
+MODE = file
+LEVEL = Info
+ROOT_PATH = /var/log/gogs
+
+[security]
+INSTALL_LOCK = true
+SECRET_KEY = {{ salt['password.pillar']('gogs:key', 24) }}

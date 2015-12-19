@@ -1,0 +1,49 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- set ssh_port = salt['pillar.get']('gogs:ssh', 2022) -%}
+{%- set version = '0.8.10' -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+gogs_procs:
+  description: Gogs processes
+  command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u git -a /usr/local/gogs/0.8.10/gogs/gogs
+
+gogs_ssh_port:
+  description: Gogs SSH port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ ssh_port }}
+  dependencies:
+    - gogs_procs
+
+gogs_ssh_port_ipv6:
+  description: Gogs SSH port
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -6 -p {{ ssh_port }}
+  dependencies:
+    - gogs_procs
+
+gogs_ssh_proto:
+  description: Gogs SSH port IPv6
+  command: /usr/lib/nagios/plugins/check_ssh -H ::1 -6 -p {{ ssh_port }}
+  dependencies:
+    - gogs_ssh_port
+
+gogs_ssh_proto_ipv6:
+  description: Gogs SSH protocol IPv6
+  command: /usr/lib/nagios/plugins/check_ssh -H 127.0.0.1 -p {{ ssh_port }}
+  dependencies:
+    - gogs_ssh_port
+
+gogs_http_port:
+  description: Gogs HTTP port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 3000
+  dependencies:
+    - gogs_procs
+
+gogs_http_port_ipv6:
+  description: Gogs HTTP port IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -6 -p 3000
+  dependencies:
+    - gogs_ssh_port_ipv6
+
+{{ postgresql_instance_prefix("gogs") }}
+{{ nginx_instance("gogs", timeout=55, http_uri='/user/login/', extra_dependencies=('gogs_http_port', 'gogs_postgresql')) }}

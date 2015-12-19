@@ -1,3 +1,7 @@
+..
+   Author: Bruno Clermont <bruno@robotinfra.com>
+   Maintainer: Bruno Clermont <bruno@robotinfra.com>
+
 Gogs
 ====
 

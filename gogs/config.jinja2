@@ -1,6 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 {%- set domain = salt['pillar.get']('gogs:hostnames')[0] -%}
-{%- set smtp = salt['pillar.get']('gitlab:smtp', False) -%}
+{%- set smtp = salt['pillar.get']('gogs:smtp', False) -%}
 # {{ salt['pillar.get']('message_do_not_modify') }}
 APP_NAME = Gogs
 RUN_USER = git
@@ -27,7 +27,7 @@ SSH_PORT = {{ ssh_port }}
 OFFLINE_MODE = false
 
 [mailer]
-{%- if salt['pillar.get']('gitlab:smtp', False) %}
+{%- if salt['pillar.get']('gogs:smtp', False) %}
 ENABLED = true
 HOST = {{ smtp['server'] }}
 FROM = {{ smtp['user'] }}

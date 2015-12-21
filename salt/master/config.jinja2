@@ -42,6 +42,8 @@ log_fmt_logfile: '%(asctime)-15s salt-master[%(process)d] %(name)s: %(message)s'
 log_datefmt_logfile: '%b %d %H:%M:%S'
 loop_interval: {{ salt['pillar.get']('salt_master:loop_interval', 60) }}
 keep_jobs: {{ salt['pillar.get']('salt_master:keep_jobs_hours', 24) }}
+{#- default value for gater_job_timeout might change between saltstack versions #}
+gater_job_timeout: {{ salt['pillar.get']('salt_master:gather_job_timeout, 5) }}
 {#
 TODO: in salt 2014.7 use http://docs.saltstack.com/en/latest/ref/configuration/master.html#master-job-cache
 {%- if salt['pillar.get']('sentry_dsn', False) %}

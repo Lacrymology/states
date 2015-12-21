@@ -29,7 +29,7 @@ OFFLINE_MODE = false
 [mailer]
 {%- if salt['pillar.get']('gogs:smtp', False) %}
 ENABLED = true
-HOST = {{ smtp['server'] }}
+HOST = {{ smtp['server'] }}:{{ smtp['port'] }}
 FROM = {{ smtp['user'] }}
 USER = {{ smtp['user'] }}
 PASSWD = {{ smtp['password'] }}

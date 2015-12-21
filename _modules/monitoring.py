@@ -102,7 +102,7 @@ class _DontExistData(object):
     pass
 
 
-def _get_first_ip(interface, addr_type):
+def get_first_ip(interface, addr_type):
     '''
     Get the first public or private IP of an interface
     If that interface does not exist, grab from all interfaces
@@ -151,9 +151,9 @@ def data():
         # from pillar data
         output['ip_addrs'] = {
             'public': ip_addrs.get('public',
-                                   _get_first_ip(interface, 'public')),
+                                   get_first_ip(interface, 'public')),
             'private': ip_addrs.get('private',
-                                    _get_first_ip(interface, 'private'))
+                                    get_first_ip(interface, 'private'))
         }
     elif 'amazon_ec2' in output:
         # if IP not defined, just pick those from EC2
@@ -164,8 +164,8 @@ def data():
     else:
         # from network interface
         output['ip_addrs'] = {
-            'public': _get_first_ip(interface, 'public'),
-            'private': _get_first_ip(interface, 'private')
+            'public': get_first_ip(interface, 'public'),
+            'private': get_first_ip(interface, 'private')
         }
 
     # figure how monitoring can reach this host using IPv6

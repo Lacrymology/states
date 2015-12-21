@@ -136,6 +136,16 @@ gogs-ssh-key:
     - require:
       - archive: gogs
 
+/usr/local/gogs/{{ version }}/gogs/data/tmp:
+  file:
+    - symlink
+    - target: /tmp
+    - user: git
+    - group: git
+    - mode: 550
+    - require:
+      - file: /usr/local/gogs/{{ version }}/gogs/data
+
 /usr/local/gogs/{{ version }}/gogs/data/ssh:
   file:
     - directory

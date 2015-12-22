@@ -135,6 +135,7 @@ strongswan_client_{{ client }}_cert:
     - user: root
     - group: root
     - mode: 400
+    - show_diff: False
     - require:
       - pkg: strongswan
 

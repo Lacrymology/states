@@ -20,6 +20,7 @@ include:
     - user: root
     - group: apt-cacher-ng
     - mode: 440
+    - show_diff: False
     - context:
         admin_username: {{ admin_username }}
         admin_password: {{ admin_password }}

@@ -191,6 +191,7 @@ gogs-ssh-key:
         ssl: {{ ssl }}
         ssh_port: {{ ssh_port }}
         db_password: {{ db_password }}
+    - show_diff: False
 
 /usr/local/gogs:
   file:

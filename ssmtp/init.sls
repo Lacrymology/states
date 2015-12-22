@@ -51,6 +51,7 @@ bsd-mailx:
     - context:
         smtp_user: {{ smtp_user }}
         smtp_passwd: {{ smtp_passwd }}
+    - show_diff: False
     - require:
       - pkg: bsd-mailx
       - pkg: ssmtp

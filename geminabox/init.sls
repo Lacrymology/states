@@ -87,6 +87,7 @@ geminabox:
         proxy_mode: {{ proxy_mode }}
         username: {{ username }}
         password: {{ password }}
+    - show_diff: False
     - require:
       - file: /usr/local/geminabox/Gemfile
       - file: /var/lib/geminabox-data

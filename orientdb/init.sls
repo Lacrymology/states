@@ -39,6 +39,7 @@ include:
         cluster: {{ cluster }}
         debug: {{ debug }}
         backup: False
+    - show_diff: False
 
 /etc/orientdb/logging.properties:
   file:

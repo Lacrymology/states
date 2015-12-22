@@ -147,6 +147,7 @@ elasticsearch_old_version:
   {%- if username and password %}
       - file: /etc/elasticsearch/nginx_basic_auth
   {%- endif %}
+    - show_diff: False
     - watch_in:
       - service: nginx
     - source: salt://nginx/proxy.jinja2

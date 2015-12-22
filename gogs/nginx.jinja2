@@ -10,6 +10,7 @@ upstream gogs {
 {%- endblock %}
 
 {%- block root_location %}
+    client_max_body_size 2M;
     if ($http_user_agent ~* "Go") {
         return 200 "
         <!DOCTYPE html>

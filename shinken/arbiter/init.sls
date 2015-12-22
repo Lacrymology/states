@@ -27,6 +27,7 @@ shinken-arbiter:
     - group: root
     - mode: 440
     - source: salt://shinken/arbiter/upstart.jinja2
+    - show_diff: False
     - require:
       - pkg: ssmtp
       - host: hostname

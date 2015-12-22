@@ -108,6 +108,7 @@ roundcube:
     - user: root
     - group: www-data
     - mode: 440
+    - show_diff: False
     - context:
         password: {{ dbuserpass }}
         dbname: {{ dbname }}

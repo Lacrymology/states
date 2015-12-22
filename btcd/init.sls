@@ -68,6 +68,7 @@ btcd_cleanup_old_files:
         rpcuser: {{ salt["pillar.get"]("btcd:rpcuser") }}
         rpcpass: {{ salt["pillar.get"]("btcd:rpcpass") }}
         debuglevel: {{ "debug" if salt["pillar.get"]("debug", False) else "info" }}
+    - show_diff: False
     - require:
       - file: /etc/btcd
 

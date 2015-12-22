@@ -127,6 +127,7 @@ include:
         salt-master-xmpp:
           xmpp.jid: {{ xmpp["jid"] }}
           xmpp.password: {{ xmpp["password"] }}
+    - show_diff: False
     - require:
       - pkg: salt-master
     - watch_in:

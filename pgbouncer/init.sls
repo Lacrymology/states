@@ -19,6 +19,7 @@ pgbouncer:
     - user: root
     - group: postgres
     - mode: 440
+    - show_diff: False
     - require:
       - pkg: pgbouncer
       - user: postgres

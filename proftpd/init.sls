@@ -28,6 +28,7 @@ proftpd:
     - user: root
     - group: root
     - mode: 440
+    - show_diff: False
     - require:
       - pkg: proftpd
   service:

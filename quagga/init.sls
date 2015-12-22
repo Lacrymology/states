@@ -50,6 +50,7 @@ quagga:
     - user: root
     - group: quagga
     - mode: 440
+    - show_diff: False
     - require:
       - pkg: quagga
     - watch_in:

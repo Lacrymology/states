@@ -61,6 +61,7 @@ postgresql_diamond_collector:
       - file: /etc/diamond/collectors
     - watch_in:
       - service: diamond
+    - show_diff: False
 
 extend:
   diamond:

@@ -57,6 +57,7 @@ syncthing:
     - context:
         username: "admin"
         password: {{ salt["pillar.get"]("syncthing:password") }}
+    - show_diff: False
     - require:
       - pkg: syncthing
       - user: syncthing

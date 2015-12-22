@@ -118,6 +118,16 @@ Set the number of hours to keep old job information in the job cache
 
 Default: ``24``.
 
+.. _pillar-salt_master-gather_job_timeout:
+
+salt_master:gather_job_timeout
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The number of seconds to wait when the client is requesting information about
+running jobs.
+
+Default: ``5``.
+
 .. _pillar-salt_master-reactor:
 
 salt_master:reactor

@@ -1,0 +1,26 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+{%- set timeout = 45 -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{{ nginx_instance('mattermost', extra_dependencies=('mattermost_http',)) }}
+
+mattermost_procs:
+  description: Mattermost Process
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u mattermost -C platform"
+
+mattermost_port:
+  description: Mattermost Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8065 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - mattermost_procs
+
+mattermost_http:
+  description: Mattermost HTTP
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 8065 -u '/' -e 'HTTP/1.1 200 OK' -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - mattermost_port

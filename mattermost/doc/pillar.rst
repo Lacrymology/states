@@ -29,6 +29,24 @@ Example::
     ssl: example_com
     ssl_redirect: True
 
+.. _pillar-mattermost-enable_team_creation:
+
+mattermost:enable_team_creation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Whether to enable creating new team or not.
+
+Default: enabled (``True``).
+
+.. _pillar-mattermost-enable_user_creation:
+
+mattermost:enable_user_creation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Whether to enable creating new user or not.
+
+Default: enabled (``True``).
+
 .. _pillar-mattermost-ssl:
 
 mattermost:ssl

@@ -15,8 +15,8 @@
     "TeamSettings": {
         "SiteName": "Mattermost",
         "MaxUsersPerTeam": 50,
-        "EnableTeamCreation": true,
-        "EnableUserCreation": true,
+        "EnableTeamCreation": {% if salt['pillar.get']('mattermost:enable_team_creation', True) %}true{% else %}false{% endif %},
+        "EnableUserCreation": {% if salt['pillar.get']('mattermost:enable_user_creation', True) %}true{% else %}false{% endif %},
         "RestrictCreationToDomains": "",
         "RestrictTeamNames": true,
         "EnableTeamListing": false

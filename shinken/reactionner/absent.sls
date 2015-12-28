@@ -14,11 +14,3 @@
 /usr/local/shinken/bin/salt_event_handler:
   file:
     - absent
-
-/etc/shinken/notify-by-xmpp.yml:
-  file:
-    - absent
-
-/usr/local/shinken/bin/notify-by-xmpp:
-  file:
-    - absent

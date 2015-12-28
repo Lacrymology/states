@@ -144,6 +144,8 @@ Example::
     log_level: DEBUG
     nrpe:
       timeout: 30
+    mattermost:
+      webhook_url: https://mattermost.example.com/hooks/privatetoken
     slack:
       channel: general
       token: xoxp-12182635943-12182635959-12180504788-f1b6c190a6
@@ -256,39 +258,13 @@ Define level of logging.
 
 Default: just log informational messages (``INFO``).
 
-shinken:xmpp
-~~~~~~~~~~~~
+.. _pillar-shinken-mattermost:
 
-Enable notification for :doc:`index`.
+shinken:mattermost
+~~~~~~~~~~~~~~~~~~
 
-Example::
-
-  shinken:
-    xmpp:
-      jid: joe@chat.example.com
-      password: password
-      recipients:
-        - recipient1
-        - recipient2
-      rooms:
-        - room1
-        - room2
-
-Format:
-
-  jid
-      `Jabber Identifier <http://xmpp.org/extensions/xep-0029.html>`_
-  password
-      password of :ref:`glossary-xmpp` account
-  recipients
-      list of recipients will receive :doc:`index` notifications via private
-      message.
-  rooms
-      list of chat rooms will receive :doc:`index` notifications via multi-user
-      chat (MUC).
-
-
-Default: turn off notify by :ref:`glossary-xmpp` (``False``).
+Whether to send a notification to :doc:`/mattermost/doc/index` web hook
+or not.
 
 .. _pillar-shinken-slack:
 
@@ -301,6 +277,13 @@ Default: turn off (``False``).
 
 Conditional
 -----------
+
+.. _pillar-shinken-mattermost-webhook_url:
+
+shinken:mattermost:webhook_url
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Webhook URL to send notification to.
 
 .. _pillar-shinken-slack-channel:
 

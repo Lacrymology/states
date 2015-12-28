@@ -144,6 +144,8 @@ Example::
     log_level: DEBUG
     nrpe:
       timeout: 30
+    mattermost:
+      webhook_url: https://mattermost.example.com/hooks/privatetoken
     slack:
       channel: general
       token: xoxp-12182635943-12182635959-12180504788-f1b6c190a6
@@ -256,6 +258,14 @@ Define level of logging.
 
 Default: just log informational messages (``INFO``).
 
+.. _pillar-shinken-mattermost:
+
+shinken:mattermost
+~~~~~~~~~~~~~~~~~~
+
+Whether to send a notification to :doc:`/mattermost/doc/index` web hook
+or not.
+
 .. _pillar-shinken-slack:
 
 shinken:slack
@@ -267,6 +277,13 @@ Default: turn off (``False``).
 
 Conditional
 -----------
+
+.. _pillar-shinken-mattermost-webhook_url:
+
+shinken:mattermost:webhook_url
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Webhook URL to send notification to.
 
 .. _pillar-shinken-slack-channel:
 

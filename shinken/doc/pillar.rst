@@ -256,40 +256,6 @@ Define level of logging.
 
 Default: just log informational messages (``INFO``).
 
-shinken:xmpp
-~~~~~~~~~~~~
-
-Enable notification for :doc:`index`.
-
-Example::
-
-  shinken:
-    xmpp:
-      jid: joe@chat.example.com
-      password: password
-      recipients:
-        - recipient1
-        - recipient2
-      rooms:
-        - room1
-        - room2
-
-Format:
-
-  jid
-      `Jabber Identifier <http://xmpp.org/extensions/xep-0029.html>`_
-  password
-      password of :ref:`glossary-xmpp` account
-  recipients
-      list of recipients will receive :doc:`index` notifications via private
-      message.
-  rooms
-      list of chat rooms will receive :doc:`index` notifications via multi-user
-      chat (MUC).
-
-
-Default: turn off notify by :ref:`glossary-xmpp` (``False``).
-
 .. _pillar-shinken-slack:
 
 shinken:slack

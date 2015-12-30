@@ -221,8 +221,7 @@ clean_pkg:
       - pkg: clean_pkg
 {%- endfor -%}
 
-{%- for file in ('/tmp/bootstrap-salt.log', '/var/lib/cloud', '/var/cache/apt-xapian-index',
-                 '/usr/lib/python3/dist-packages/python_apt-0.9.3.5ubuntu2.egg-info') %}
+{%- for file in ('/tmp/bootstrap-salt.log', '/var/lib/cloud', '/var/cache/apt-xapian-index') %}
 {{ file }}:
   file:
     - absent

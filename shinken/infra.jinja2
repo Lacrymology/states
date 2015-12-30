@@ -15,8 +15,8 @@
 {%- set integrations = {
     'mattermost': {
         'pillar': salt["pillar.get"]("shinken:mattermost", False),
-        'notify-host': '/usr/bin/printf "%s" "payload={\"text\": \"Host [$HOSTALIAS$ ($HOSTADDRESS$)](' ~ shinken_url ~ '/host/$HOSTNAME$) is $HOSTSTATE$ at $LONGDATETIME$.\\nDetail: $HOSTOUTPUT$\"}" | curl -H "Accept: application/json" -XPOST --data @- {{ webhook_url }}',
-        'notify-service': '/usr/bin/printf "%s" "payload={\"text\": \"**$SERVICEDESC$** is $SERVICESTATE$ at $LONGDATETIME$ on [$HOSTALIAS$ ($HOSTADDRESS$)](' ~ shinken_url ~ '/host/$HOSTNAME$)\\nAdditional info: $SERVICEOUTPUT$\\n*Services*:   \`$TOTALSERVICESOK$\` :white_check_mark:   \`$TOTALSERVICESWARNING$\` :warning:   \`$TOTALSERVICESCRITICAL$\` :boom:   \`$TOTALSERVICESUNKNOWN$\` :question:   \`$TOTALSERVICEPROBLEMS$\` :interrobang:\", \"icon_url\": \"' ~ shinken_url ~ '/static/img/logo.png\"}" | curl -H "Accept: application/json" -XPOST --data @- {{ webhook_url }}',
+        'notify-host': '/usr/local/shinken/bin/mattermost_notify.py --config=/etc/shinken/mattermost_hookurl.conf --mode=host --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-name="$HOSTNAME$" --long-date-time="$LONGDATETIME$" --host-output="$HOSTOUTPUT$" --host-state="$HOSTSTATE$" --shinken-url="' ~ shinken_url ~ '"',
+        'notify-service': '/usr/local/shinken/bin/mattermost_notify.py --config=/etc/shinken/mattermost_hookurl.conf --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-name="$HOSTNAME$" --long-date-time="$LONGDATETIME$" --service-desc="$SERVICEDESC$" --service-output="$SERVICEOUTPUT$" --service-state="$SERVICESTATE$" --shinken-url="' ~ shinken_url ~ '" --total-service-ok="$TOTALSERVICESOK$" --total-service-warning="$TOTALSERVICESWARNING$" --total-service-critical="$TOTALSERVICESCRITICAL$" --total-service-unknown="$TOTALSERVICESUNKNOWN$" --total-service-problem="$TOTALSERVICEPROBLEMS$"'
     },
     'slack': {
         'pillar': salt["pillar.get"]("shinken:slack", False),
@@ -27,6 +27,9 @@
 
 define host {
     name salt-host
+{%- if integrations['mattermost']['pillar'] %}
+    contacts mattermost
+{%- endif %}
     contact_groups admins
     notification_interval 0
     first_notification_delay 0

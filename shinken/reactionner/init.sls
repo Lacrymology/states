@@ -81,3 +81,41 @@ shinken-reactionner:
       - file: /usr/local/bin/salt_fire_event.py
     - require_in:
       - service: shinken-reactionner
+
+{%- set mattermost = salt["pillar.get"]("shinken:mattermost", False) %}
+/etc/shinken/mattermost_hookurl.conf:
+  file:
+    - managed
+    - contents: |
+        {{ salt['pillar.get']('shinken:mattermost:webhook_url') }}
+    - user: root
+    - group: shinken
+    - mode: 440
+    - require:
+      - virtualenv: shinken
+      - file: /etc/shinken
+    - require_in:
+      - service: shinken-reactionner
+
+/usr/local/shinken/bin/mattermost_notify:
+  file:
+    - managed
+    - source: salt://shinken/reactionner/mattermost_notify.py
+    - template: jinja
+    - user: root
+    - group: shinken
+    - mode: 550
+    - require:
+      - file: /etc/shinken/mattermost_hookurl.conf
+      - module: shinken
+    - require_in:
+      - service: shinken-reactionner
+{%- else %}
+/etc/shinken/mattermost_hookurl.conf:
+  file:
+    - absent
+
+/usr/local/shinken/bin/mattermost_notify:
+  file:
+    - absent
+{%- endif %}

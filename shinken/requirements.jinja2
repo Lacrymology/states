@@ -10,6 +10,9 @@ pycurl==7.19.5
 pyOpenSSL==0.14
 CherryPy==3.2.4
 {%- endif %}
+{%- if salt["pillar.get"]("shinken:mattermost", False) %}
+requests==2.4.3
+{%- endif %}
 {%- if salt["pillar.get"]("shinken:slack", False) %}
 slacker==0.7.3
 slacker-cli==0.2.2

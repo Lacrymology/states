@@ -83,6 +83,7 @@ shinken-reactionner:
       - service: shinken-reactionner
 
 {%- set mattermost = salt["pillar.get"]("shinken:mattermost", False) %}
+{%- if mattermost %}
 /etc/shinken/mattermost_hookurl.conf:
   file:
     - managed

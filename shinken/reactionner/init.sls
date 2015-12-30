@@ -84,11 +84,13 @@ shinken-reactionner:
 
 {%- set mattermost = salt["pillar.get"]("shinken:mattermost", False) %}
 {%- if mattermost %}
-/etc/shinken/mattermost_hookurl.conf:
+/etc/shinken/mattermost_hookurl.yml:
   file:
     - managed
-    - contents: |
-        {{ salt['pillar.get']('shinken:mattermost:webhook_url') }}
+    - source: salt://shinken/reactionner/mattermost_notify.jinja2
+    - template: jinja
+    - context:
+        hook_url: {{ salt['pillar.get']('shinken:mattermost:webhook_url') }}
     - user: root
     - group: shinken
     - mode: 440
@@ -107,12 +109,12 @@ shinken-reactionner:
     - group: shinken
     - mode: 550
     - require:
-      - file: /etc/shinken/mattermost_hookurl.conf
+      - file: /etc/shinken/mattermost_hookurl.yml
       - module: shinken
     - require_in:
       - service: shinken-reactionner
 {%- else %}
-/etc/shinken/mattermost_hookurl.conf:
+/etc/shinken/mattermost_hookurl.yml:
   file:
     - absent
 

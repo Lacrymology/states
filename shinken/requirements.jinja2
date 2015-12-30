@@ -12,6 +12,11 @@ CherryPy==3.2.4
 {%- endif %}
 {%- if salt["pillar.get"]("shinken:mattermost", False) %}
 requests==2.4.3
+  {%- if salt['pillar.get']('files_archive', False) %}
+pysc==0.3.20
+  {%- else %}
+http://archive.robotinfra.com/pip/pysc-0.3.20.tar.bz2
+  {%- endif %}
 {%- endif %}
 {%- if salt["pillar.get"]("shinken:slack", False) %}
 slacker==0.7.3

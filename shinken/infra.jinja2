@@ -15,8 +15,8 @@
 {%- set integrations = {
     'mattermost': {
         'pillar': salt["pillar.get"]("shinken:mattermost", False),
-        'notify-host': '/usr/local/shinken/bin/mattermost_notify.py --config=/etc/shinken/mattermost_hookurl.conf --mode=host --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-name="$HOSTNAME$" --long-date-time="$LONGDATETIME$" --host-output="$HOSTOUTPUT$" --host-state="$HOSTSTATE$" --shinken-url="' ~ shinken_url ~ '"',
-        'notify-service': '/usr/local/shinken/bin/mattermost_notify.py --config=/etc/shinken/mattermost_hookurl.conf --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-name="$HOSTNAME$" --long-date-time="$LONGDATETIME$" --service-desc="$SERVICEDESC$" --service-output="$SERVICEOUTPUT$" --service-state="$SERVICESTATE$" --shinken-url="' ~ shinken_url ~ '" --total-service-ok="$TOTALSERVICESOK$" --total-service-warning="$TOTALSERVICESWARNING$" --total-service-critical="$TOTALSERVICESCRITICAL$" --total-service-unknown="$TOTALSERVICESUNKNOWN$" --total-service-problem="$TOTALSERVICEPROBLEMS$"'
+        'notify-host': '/usr/local/shinken/bin/mattermost_notify --config=/etc/shinken/mattermost_hookurl.yml --mode=host --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-name="$HOSTNAME$" --long-date-time="$LONGDATETIME$" --host-output="$HOSTOUTPUT$" --host-state="$HOSTSTATE$" --shinken-url="' ~ shinken_url ~ '"',
+        'notify-service': '/usr/local/shinken/bin/mattermost_notify --config=/etc/shinken/mattermost_hookurl.yml --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-name="$HOSTNAME$" --long-date-time="$LONGDATETIME$" --service-desc="$SERVICEDESC$" --service-output="$SERVICEOUTPUT$" --service-state="$SERVICESTATE$" --shinken-url="' ~ shinken_url ~ '" --total-service-ok="$TOTALSERVICESOK$" --total-service-warning="$TOTALSERVICESWARNING$" --total-service-critical="$TOTALSERVICESCRITICAL$" --total-service-unknown="$TOTALSERVICESUNKNOWN$" --total-service-problem="$TOTALSERVICEPROBLEMS$"'
     },
     'slack': {
         'pillar': salt["pillar.get"]("shinken:slack", False),

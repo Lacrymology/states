@@ -1,9 +1,16 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/local/shinken/bin/python
+# Use of this is governed by a license that can be found in doc/license.rst.
 
-import argparse
-import os
+"""
+Sent shinken notifications
+"""
+import logging
+
 import requests
+
+import pysc
+
+logger = logging.getLogger(__name__)
 
 emoticons = {
     'CRITICAL': ':skull:',
@@ -27,56 +34,39 @@ SERVICE_FMT = ('**{service_desc}** is **{service_state}** at '
                )
 
 
+class MattermostNotify(pysc.Application):
+
+    def get_argument_parser(self):
+        argp = super(MattermostNotify, self).get_argument_parser()
+        for arg in ('mode',
+                    'service-desc', 'service-state', 'long-date-time',
+                    'host-alias', 'host-address',
+                    'shinken-url', 'host-name',
+                    'host-output', 'host-state',
+                    'service-output', 'total-service-ok',
+                    'total-service-warning',
+                    'total-service-critical', 'total-service-unknown',
+                    'total-service-problem'):
+            argp.add_argument('--' + arg, default='N/A')
+        return argp
+
+    def main(self):
+        if self.config['mode'] == 'host':
+            message = HOST_FMT.format(**self.config)
+            state = self.config['host_state']
+        else:
+            message = SERVICE_FMT.format(**self.config)
+            state = self.config['service_state']
+        emo = emoticons.get(state, ':loudspeaker:')
+        message = {
+            'text': emo + message,
+            'icon_url': "{0}/static/img/logo.png".format(
+                self.config['shinken_url'])}
+        resp = requests.post(self.config['hook_url'], json=message)
+        if resp.status_code != 200:
+            logger.error("Could not send message to Mattermost server."
+                         "HTTP code %d", resp.status_code)
+
+
 if __name__ == "__main__":
-    argp = argparse.ArgumentParser()
-    for arg in ('mode',
-                'config',
-                'service-desc', 'service-state', 'long-date-time',
-                'host-alias', 'host-address',
-                'shinken-url', 'host-name',
-                'host-output', 'host-state',
-                'service-output', 'total-service-ok',
-                'total-service-warning',
-                'total-service-critical', 'total-service-unknown',
-                'total-service-problem'):
-        argp.add_argument('--' + arg, default='N/A')
-
-    args = argp.parse_args()
-
-    if args.mode == 'host':
-        message = HOST_FMT.format(
-            host_alias=args.host_alias,
-            host_address=args.host_address,
-            shinken_url=args.shinken_url,
-            host_name=args.host_name,
-            host_state=args.host_state,
-            long_date_time=args.long_date_time,
-            host_output=args.host_output
-        )
-        state = args.host_state
-    else:
-        message = SERVICE_FMT.format(
-            service_desc=args.service_desc,
-            service_state=args.service_state,
-            long_date_time=args.long_date_time,
-            host_alias=args.host_alias,
-            host_address=args.host_address,
-            shinken_url=args.shinken_url,
-            host_name=args.host_name,
-            service_output=args.service_output,
-            total_service_ok=args.total_service_ok,
-            total_service_warning=args.total_service_warning,
-            total_service_critical=args.total_service_critical,
-            total_service_unknown=args.total_service_unknown,
-            total_service_problem=args.total_service_problem
-            )
-        state = args.service_state
-
-    emo = emoticons.get(state, ':loudspeaker:')
-    message = {'text': emo + message,
-               'icon_url': "{0}/static/img/logo.png".format(args.shinken_url)
-               }
-    hook_url = os.environ.get('MM_HOOK_URL', None)
-    if not hook_url:
-        hook_url = open(args.config).read().strip()
-    print requests.post(hook_url, json=message)
+    MattermostNotify().run()

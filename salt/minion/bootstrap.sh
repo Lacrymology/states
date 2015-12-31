@@ -42,8 +42,10 @@ apt-get install -y --force-yes salt-minion
 
 if [ $LOCAL_MODE -eq 1 ]; then
     echo "Salt master-less (local) mode"
-    echo $1 > /etc/hostname
-    hostname `cat /etc/hostname`
+    if [ ! -f /.dockerinit ]; then
+      echo $1 > /etc/hostname
+      hostname `cat /etc/hostname`
+    fi
 
     # in local mode create a file_root that only hold a symlink back to
     # salt/master/top.jinja2.

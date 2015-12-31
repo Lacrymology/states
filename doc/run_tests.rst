@@ -4,14 +4,13 @@ Running Integration Tests
 As running tests is expensive in term of file copy, only the ``local`` mode is
 used to run them.
 
-Follow the same setup process as in :doc:`dev`, but make sure that you use an
-hostname that starts with ``integration``::
+Follow the same setup process as in :doc:`dev`::
 
-  /root/salt/states/salt/minion/bootstrap.sh integration-[whatever]
+  /root/salt/states/salt/minion/bootstrap.sh <whatever>
 
 Quick shortcut::
 
-  cd /; tar -xzf /tmp/archive.tar.gz; /root/salt/states/salt/minion/bootstrap.sh integration
+  cd /; tar -xzf /tmp/archive.tar.gz; /root/salt/states/salt/minion/bootstrap.sh scintegration
 
 Integration Tests
 -----------------

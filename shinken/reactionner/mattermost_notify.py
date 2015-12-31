@@ -23,8 +23,8 @@ HOST_FMT = (
     "is **{host_state}** at {long_date_time}.\nDetail: {host_output}"
 )
 SERVICE_FMT = ('**{service_desc}** is **{service_state}** at '
-               '{long_date_time} on [{host_alias} '
-               '({host_address})]({shinken_url}/host/{host_name})\n'
+               '{long_date_time} on [{host_alias} ({host_address})]'
+               '({shinken_url}/service/{host_name}/{service_desc})\n'
                'Additional info: {service_output}\n'
                '*Services*:   `{total_service_ok}` :ok:'
                '  `{total_service_warning}` :warning:'

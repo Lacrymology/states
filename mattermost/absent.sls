@@ -22,6 +22,12 @@ mattermost_user:
     - require:
       - service: mattermost
 
+/var/lib/mattermost:
+  file:
+    - absent
+    - require:
+      - service: mattermost
+
 /var/log/mattermost:
   file:
     - absent

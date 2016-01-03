@@ -20,7 +20,7 @@ mattermost_port:
 
 mattermost_http:
   description: Mattermost HTTP
-  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 8065 -u '/' -e 'HTTP/1.1 200 OK' -t {{ timeout }}
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 8065 -u '/' -e 'HTTP/1.0 200 OK' -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - mattermost_port

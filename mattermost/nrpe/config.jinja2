@@ -2,10 +2,12 @@
 
 {%- set timeout = 45 -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 {{ nginx_instance('mattermost', extra_dependencies=('mattermost_http',)) }}
+{{ postgresql_instance_prefix('mattermost') }}
 
 mattermost_procs:
   description: Mattermost Process

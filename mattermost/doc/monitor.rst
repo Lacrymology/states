@@ -1,6 +1,10 @@
 Monitor
 =======
 
+Mandatory
+---------
+
+
 .. |deployment| replace:: mattermost
 
 .. warning::
@@ -8,8 +12,16 @@ Monitor
    In this document, when refer to a pillar key ``pillar_prefix``
    means ``mattermost``.
 
-Mandatory
----------
+.. include:: /nginx/doc/monitor.inc
+
+.. include:: /postgresql/doc/monitor.inc
+
+.. include:: /backup/doc/monitor_postgres_procs.inc
+
+.. include:: /backup/doc/monitor.inc
+
+.. include:: /backup/doc/monitor_procs.inc
+
 
 .. _monitor-mattermost_procs:
 
@@ -34,12 +46,6 @@ mattermost_http
 ~~~~~~~~~~~~~~~
 
 :doc:`/mattermost/doc/index` :ref:`glossary-daemon` :ref:`glossary-HTTP` port works properly.
-
-.. include:: /nginx/doc/monitor.inc
-
-.. include:: /backup/doc/monitor.inc
-
-.. include:: /backup/doc/monitor_procs.inc
 
 Optional
 --------

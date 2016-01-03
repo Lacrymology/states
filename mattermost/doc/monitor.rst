@@ -20,9 +20,6 @@ Mandatory
 
 .. include:: /backup/doc/monitor.inc
 
-.. include:: /backup/doc/monitor_procs.inc
-
-
 .. _monitor-mattermost_procs:
 
 mattermost_procs

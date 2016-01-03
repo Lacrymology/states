@@ -1,6 +1,6 @@
 # Usage of this is governed by a license that can be found in doc/license.rst
 # {{ salt['pillar.get']('message_do_not_modify') }}
--e git+gitlab@git.robotinfra.com:dev/sphinx-theme-doc.git#egg=sphinx_rtd_theme
+http://archive.robotinfra.com/pip/sphinx_rtd_theme-0.1.7.tar.bz2
 Sphinx==1.2.3
 pyyaml==3.11
 docutils==0.11

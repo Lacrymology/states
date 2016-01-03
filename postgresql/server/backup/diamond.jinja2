@@ -1,10 +1,9 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- macro postgresql_backup_diamond(deployment, prefix=None)  %}
-  {%- if not prefix  %}
-    {%- set prefix = deployment %}
+{%- macro postgresql_backup_diamond(deployment, dbname=None)  %}
+  {%- if not dbname  %}
+    {%- set dbname = deployment %}
   {%- endif  %}
-  {%- set db_name = salt['pillar.get'](prefix + ':db:name', deployment) %}
 {{ deployment }}_backup_diamond_resources:
   file:
     - accumulated
@@ -16,5 +15,5 @@
     - text:
       - |
         [[backup-{{ deployment }}-postgres]]
-        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ db_name }}
+        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ dbname }}
 {%- endmacro  %}

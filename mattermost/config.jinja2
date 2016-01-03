@@ -23,7 +23,7 @@
     },
     "SqlSettings": {
         "DriverName": "postgres",
-        "DataSource": "postgres://mattermost:{{ salt['password.pillar']('mattermost:db_password', 10) }}@127.0.0.1:5432/mattermost?sslmode=disable&connect_timeout=10",
+        "DataSource": "postgres://mattermost:{{ salt['password.pillar']('mattermost:db:password', 10) }}@127.0.0.1:5432/mattermost?sslmode=disable&connect_timeout=10",
         "DataSourceReplicas": [],
         "MaxIdleConns": 10,
         "MaxOpenConns": 10,

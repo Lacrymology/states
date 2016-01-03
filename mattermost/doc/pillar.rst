@@ -61,7 +61,7 @@ mattermost:ssl_redirect
 
 .. include:: /nginx/doc/ssl_redirect.inc
 
-mattermost:db_password
+mattermost:db:password
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /postgresql/doc/password.inc

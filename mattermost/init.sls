@@ -48,7 +48,7 @@ mattermost:
   postgres_user:
     - present
     - name: mattermost
-    - password: {{ salt['password.pillar']('mattermost:db_password', 10) }}
+    - password: {{ salt['password.pillar']('mattermost:db:password', 10) }}
     - runas: postgres
     - require:
       - service: postgresql

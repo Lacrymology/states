@@ -13,7 +13,7 @@ ssl-cert:
 
 {#-
 package ca-certificates can't be removed because salt-minion require it,
-this command is for regenerating ssl-cert because /etc/ssl/certs is remove in ssl.absent
+this command is for regenerating ssl-cert because /etc/ssl/certs is removed in ssl.absent
 Visa_eCommerce_Root.pem is one of valid cert in /usr/share/ca-certificates
 #}
 ca-certificates:

@@ -30,7 +30,7 @@ include:
 
 djangopypi2:
   virtualenv:
-    - manage
+    - managed
     - name: /usr/local/djangopypi2
     - system_site_packages: False
     - require:

@@ -59,7 +59,7 @@ diamond.conf:
 
 diamond:
   virtualenv:
-    - manage
+    - managed
     - name: /usr/local/diamond
     - require:
       - module: virtualenv

@@ -29,7 +29,7 @@ include:
 
 s3lite:
   virtualenv:
-    - manage
+    - managed
     - name: /usr/local/s3lite
     - system_site_packages: False
     - require:

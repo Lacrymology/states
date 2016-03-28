@@ -53,7 +53,7 @@ nrpe-virtualenv:
     - require:
       - module: pip
   virtualenv:
-    - manage
+    - managed
     {#- some check need import salt code #}
     - system_site_packages: True
     - name: /usr/local/nagios

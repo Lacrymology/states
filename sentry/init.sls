@@ -32,7 +32,7 @@ include:
 
 sentry:
   virtualenv:
-    - manage
+    - managed
     - name: /usr/local/sentry
     - system_site_packages: False
     - require:

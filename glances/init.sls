@@ -11,7 +11,7 @@ include:
 
 glances:
   virtualenv:
-    - manage
+    - managed
     - name: /usr/local/glances
     - require:
       - file: /usr/local

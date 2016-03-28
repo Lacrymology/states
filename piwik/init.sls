@@ -162,7 +162,7 @@ piwik_uwsgi:
 
 piwik_initial_setup:
   virtualenv:
-    - manage
+    - managed
     - name: /usr/local/piwik
   file:
     - managed

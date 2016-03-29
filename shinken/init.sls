@@ -152,7 +152,7 @@ shinken:
     - require:
       - cmd: apt_sources
   virtualenv:
-    - manage
+    - managed
     - name: /usr/local/shinken
     - system_site_packages: False
     - require:

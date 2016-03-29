@@ -28,7 +28,7 @@ include:
 So, install from tarball instead of using native Ubuntu package #}
 fail2ban:
   virtualenv:
-    - manage
+    - managed
     - name: /usr/local/fail2ban
     - require:
       - module: virtualenv
